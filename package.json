@@ -1,0 +1,15 @@
+{
+  "name": "geojson2svg",
+  "version": "0.0.1",
+  "description": "Converts geojson to svg string given svg viewport size and maps extent.",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "test/test.js"
+  },
+  "keywords": ["maps", "geojson", "svg"],
+  "auther": "Gagan Bansal",
+  "license": "MIT",
+  "dependencies": {
+    "reproject": "~0.1.1"
+  }
+}
