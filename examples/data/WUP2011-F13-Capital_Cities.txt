@@ -1,0 +1,237 @@
+4	Afghanistan	Kabul	Capital	20002	34.54	69.17	3097
+8	Albania	TiranëTirana)	Capital	20005	41.33	19.82	419
+12	Algeria	El Djazaï (Algiers)	Capital	20006	36.76	3.05	2916
+16	American Samoa	Pago Pago	Capital	20047	-14.28	-170.70	64
+20	Andorra	Andorra la Vella	Capital	20048	42.51	1.51	23
+24	Angola	Luanda	Capital	20049	-8.84	13.23	5068
+660	Anguilla	The Valley	Capital	22407	18.22	-63.05	2
+28	Antigua and Barbuda	St. John\'s	Capital	20052	17.12	-61.85	27
+32	Argentina	Buenos Aires	Capital	20058	-34.59	-58.67	13528
+51	Armenia	Yerevan	Capital	20140	40.18	44.50	1116
+533	Aruba	Oranjestad	Capital	21954	12.53	-70.03	37
+36	Australia	Canberra	Capital	20091	-35.31	149.13	399
+40	Austria	Wien (Vienna)	Capital	20107	48.12	16.22	1720
+31	Azerbaijan	Baku	Capital	20053	40.39	49.86	2123
+44	Bahamas	Nassau	Capital	20108	25.06	-77.33	254
+48	Bahrain	Al-Manamah (Manama)	Capital	20109	26.24	50.58	262
+50	Bangladesh	Dhaka	Capital	20119	23.72	90.41	15391
+52	Barbados	Bridgetown	Capital	20141	13.11	-59.61	122
+112	Belarus	Minsk	Capital	20348	53.90	27.57	1861
+84	Belize	Belmopan	Capital	20310	17.25	-88.79	14
+204	Benin	1	Cotonou	Seat of Government	20888	6.35	2.43	924
+204	Benin	1	Porto-Novo	Constitution Capital	20891	6.48	2.62	314
+60	Bermuda	Hamilton	Capital	20150	32.30	-64.80	11
+64	Bhutan	Thimphu	Capital	20151	27.48	89.60	99
+68	Bolivia (Plurinational State of)	2	La Paz	Seat of Government	20153	-16.50	-68.15	1715
+68	Bolivia (Plurinational State of)	2	Sucre	Legislative Capital	20158	-19.04	-65.26	307
+70	Bosnia and Herzegovina	Sarajevo	Capital	20164	43.87	18.42	389
+72	Botswana	Gaborone	Capital	20167	-24.65	25.91	202
+76	Brazil	Brasía	Capital	20187	-15.78	-47.92	3813
+92	British Virgin Islands	Road Town	Capital	20313	18.43	-64.63	10
+96	Brunei Darussalam	Bandar Seri Begawan	Capital	20314	4.88	114.93	16
+100	Bulgaria	Sofia	Capital	20327	42.69	23.31	1174
+854	Burkina Faso	Ouagadougou	Capital	23192	12.37	-1.52	2053
+108	Burundi	Bujumbura	Capital	20340	-3.38	29.37	605
+116	Cambodia	Phnum Pé (Phnom Penh)	Capital	20357	11.55	104.92	1550
+120	Cameroon	Yaoundéapital	20365	3.87	11.52	2432
+124	Canada	3	Ottawa-Gatineau	Capital	20387	45.42	-75.71	1208
+132	Cape Verde	Praia	Capital	20408	14.93	-23.54	132
+136	Cayman Islands	George Town	Capital	20409	19.30	-81.38	28
+140	Central African Republic	Bangui	Capital	20410	4.38	18.62	740
+148	Chad	N\'Djamé	Capital	20420	12.12	15.05	1079
+830	Channel Islands	4	St. Helier	Capital	22891	49.18	-2.10	31
+152	Chile	Santiago	Capital	20439	-33.45	-70.67	6034
+156	China	Beijing	Capital	20464	39.92	116.43	15594
+344	China Hong Kong SAR	5	Hong Kong	Capital	21137	22.25	114.16	7122
+446	China Macao SAR	6	Macao	Capital	21791	22.16	113.55	556
+170	Colombia	Bogotáapital	20837	4.63	-74.08	8744
+174	Comoros	Moroni	Capital	20847	-11.70	43.24	54
+178	Congo	Brazzaville	Capital	20848	-4.25	15.26	1611
+184	Cook Islands	7	Rarotonga	Capital	20860	-21.23	-159.76	15
+188	Costa Rica	San Joséapital	20861	9.93	-84.08	1515
+384	Côd\'Ivoire	8	Abidjan	Seat of Government	21602	5.32	-4.03	4288
+384	Côd\'Ivoire	8	Yamoussoukro	Capital	21606	6.82	-5.28	966
+191	Croatia	Zagreb	Capital	20865	45.80	16.00	686
+192	Cuba	La Habana (Havana)	Capital	20870	23.13	-82.36	2116
+196	Cyprus	Lefkosia (Nicosia)	Capital	20880	35.17	33.37	253
+203	Czech Republic	Praha (Prague)	Capital	20887	50.08	14.43	1276
+408	Dem. People\'s Republic of Korea	P\'yongyang	Capital	21722	39.02	125.75	2843
+180	Democratic Republic of the Congo	Kinshasa	Capital	20853	-4.30	15.30	8798
+208	Denmark	Køavn (Copenhagen)	Capital	20894	55.71	12.56	1206
+262	Djibouti	Djibouti	Capital	21005	11.60	43.15	496
+212	Dominica	Roseau	Capital	20896	15.30	-61.39	14
+214	Dominican Republic	Santo Domingo	Capital	20898	18.47	-69.90	2191
+218	Ecuador	Quito	Capital	20910	-0.22	-78.50	1622
+818	Egypt	Al-Qahirah (Cairo)	Capital	22812	30.05	31.25	11169
+222	El Salvador	San Salvador	Capital	20917	13.69	-89.19	1605
+226	Equatorial Guinea	Malabo	Capital	20920	3.75	8.79	137
+232	Eritrea	Asmara	Capital	20931	15.33	38.93	712
+233	Estonia	Tallinn	Capital	20932	59.44	24.74	400
+231	Ethiopia	Addis Ababa	Capital	20921	9.03	38.70	2979
+238	Falkland Islands (Malvinas)	Stanley	Capital	20935	-51.70	-57.82	2
+234	Faroe Islands	Tóavn	Capital	20934	62.03	-6.80	20
+242	Fiji	Suva	Capital	20936	-18.12	178.44	177
+246	Finland	Helsinki	Capital	20937	60.17	24.94	1134
+250	France	Paris	Capital	20985	48.87	2.33	10620
+254	French Guiana	Cayenne	Capital	21002	4.93	-52.33	67
+258	French Polynesia	Papeete	Capital	21004	-17.53	-149.57	137
+266	Gabon	Libreville	Capital	21006	0.40	9.46	686
+270	Gambia	Banjul	Capital	21012	13.45	-16.60	506
+268	Georgia	Tbilisi	Capital	21011	41.72	44.78	1121
+276	Germany	Berlin	Capital	204296	52.52	13.38	3462
+288	Ghana	Accra	Capital	21107	5.55	-0.22	2573
+292	Gibraltar	Gibraltar	Capital	21111	36.14	-5.35	29
+300	Greece	Athíi (Athens)	Capital	21113	37.98	23.73	3414
+304	Greenland	Nuuk (Godthå	Capital	21119	64.18	-51.73	16
+308	Grenada	St.George\'s	Capital	21120	12.06	-61.74	41
+312	Guadeloupe	Basse-Terre	Capital	205152	16.00	-61.72	13
+316	Guam	Hagåa	Capital	21123	13.46	144.75	169
+320	Guatemala	Ciudad de Guatemala (Guatemala City)	Capital	21124	14.63	-90.52	1168
+324	Guinea	Conakry	Capital	21126	9.51	-13.71	1786
+624	Guinea-Bissau	Bissau	Capital	22171	11.88	-15.63	423
+328	Guyana	Georgetown	Capital	21131	6.79	-58.16	127
+332	Haiti	Port-au-Prince	Capital	21133	18.54	-72.34	2207
+336	Holy See	Vatican City	Capital	21134	41.90	12.45	0
+340	Honduras	Tegucigalpa	Capital	21136	14.10	-87.22	1088
+348	Hungary	Budapest	Capital	21138	47.50	19.08	1737
+352	Iceland	ReykjavíCapital	21147	64.14	-21.92	206
+356	India	9	Delhi	Capital	21228	28.67	77.22	22654
+360	Indonesia	Jakarta	Capital	21454	-6.13	106.75	9769
+364	Iran (Islamic Republic of)	Tehran	Capital	21523	35.67	51.42	7304
+368	Iraq	Baghdad	Capital	21529	33.34	44.39	6036
+372	Ireland	Dublin	Capital	21542	53.33	-6.25	1121
+833	Isle of Man	Douglas	Capital	22892	54.15	-4.48	27
+376	Israel	Jerusalem	Capital	21547	31.78	35.22	791
+380	Italy	Roma (Rome)	Capital	21588	41.89	12.50	3298
+388	Jamaica	Kingston	Capital	21607	17.99	-76.80	571
+392	Japan	Tokyo	Capital	21671	35.69	139.75	37217
+400	Jordan	Amman	Capital	21700	31.95	35.93	1179
+398	Kazakhstan	Astana	Capital	21679	51.17	71.47	664
+404	Kenya	Nairobi	Capital	21711	-1.28	36.82	3363
+296	Kiribati	10	Tarawa	Capital	21112	1.50	173.00	44
+414	Kuwait	Al Kuwayt (Kuwait City)	Capital	21769	29.33	47.98	2406
+417	Kyrgyzstan	Bishkek	Capital	21770	42.87	74.57	839
+418	Lao People\'s Democratic Republic	Vientiane	Capital	21772	17.96	102.60	810
+428	Latvia	Riga	Capital	21778	56.95	24.10	701
+422	Lebanon	Bayrut (Beirut)	Capital	21773	33.87	35.51	2022
+426	Lesotho	Maseru	Capital	21775	-29.32	27.48	239
+430	Liberia	Monrovia	Capital	21779	6.31	-10.80	750
+434	Libya	Tarabulus (Tripoli)	Capital	21782	32.89	13.18	1127
+438	Liechtenstein	Vaduz	Capital	21783	47.14	9.53	5
+440	Lithuania	Vilnius	Capital	21789	54.67	25.32	546
+442	Luxembourg	Luxembourg	Capital	21790	49.62	6.10	94
+450	Madagascar	Antananarivo	Capital	21792	-18.92	47.52	1987
+454	Malawi	Lilongwe	Capital	21799	-13.98	33.78	772
+458	Malaysia	11	Kuala Lumpur	Capital	21808	3.17	101.70	1556
+462	Maldives	Male	Capital	21817	4.17	73.50	132
+466	Mali	Bamako	Capital	21818	12.65	-8.00	2037
+470	Malta	Valletta	Capital	21819	35.90	14.51	198
+584	Marshall Islands	Majuro	Capital	22033	7.08	171.13	31
+474	Martinique	Fort-de-France	Capital	21820	14.60	-61.08	87
+478	Mauritania	Nouakchott	Capital	21821	18.10	-15.95	786
+480	Mauritius	Port Louis	Capital	21822	-20.17	57.50	151
+175	Mayotte	Mamoudzou	Capital	205636	0.00	0.00	6
+484	Mexico	Ciudad de Méco (Mexico City)	Capital	21853	19.50	-99.12	20446
+583	Micronesia (Fed. States of)	Palikir	Capital	22032	6.92	158.15	7
+492	Monaco	Monaco	Capital	21881	43.73	7.44	35
+496	Mongolia	Ulaanbaatar	Capital	21882	47.92	106.92	1184
+499	Montenegro	Podgorica	Capital	23256	42.44	19.26	156
+500	Montserrat	12	Brades Estate	Seat of Government	204440	16.78	-62.20	1
+500	Montserrat	12	Plymouth	Capital	21887	16.73	-62.23	0
+504	Morocco	Rabat	Capital	21899	34.03	-6.83	1843
+508	Mozambique	Maputo	Capital	21910	-25.97	32.59	1150
+104	Myanmar	Nay Pyi Taw	Capital	205588	19.75	96.12	1060
+516	Namibia	Windhoek	Capital	21925	-22.57	17.08	380
+520	Nauru	Nauru	Capital	21926	-0.53	166.91	10
+524	Nepal	Kathmandu	Capital	21928	27.72	85.32	1015
+528	Netherlands	13	Amsterdam	Capital	21930	52.37	4.89	1056
+528	Netherlands	13	s-Gravenhage (The Hague)	Seat of Government	205146	52.08	4.28	635
+530	Netherlands Antilles	Willemstad	Capital	21953	12.10	-68.93	115
+540	New Caledonia	NouméCapital	21955	-22.27	166.44	157
+554	New Zealand	Wellington	Capital	21962	-41.28	174.78	410
+558	Nicaragua	Managua	Capital	21967	12.15	-86.27	970
+562	Niger	Niamey	Capital	21972	13.52	2.12	1297
+566	Nigeria	Abuja	Capital	21976	9.12	7.46	2153
+570	Niue	Alofi	Capital	22025	-19.01	169.91	1
+580	Northern Mariana Islands	14	Saipan	Capital	22031	15.12	145.45	56
+578	Norway	Oslo	Capital	22028	59.91	10.75	915
+275	Occupied Palestinian Territory	Ramallah	Administrative Capital	21016	31.90	35.20	75
+512	Oman	Masqat (Muscat)	Capital	21922	23.61	58.59	743
+586	Pakistan	Islamabad	Capital	22042	33.70	73.17	919
+585	Palau	Melekeok	Capital	205632	7.48	134.63	1
+591	Panama	Ciudad de PanamáPanama City)	Capital	22063	8.97	-79.53	1426
+598	Papua New Guinea	Port Moresby	Capital	22064	-9.48	147.18	343
+600	Paraguay	Asuncióapital	22065	-25.27	-57.67	2139
+604	Peru	Lima	Capital	22078	-12.05	-77.05	9130
+608	Philippines	Manila	Capital	22109	14.58	121.00	11862
+612	Pitcairn	Adamstown	Capital	22126	-25.06	-130.08	0
+616	Poland	Warszawa (Warsaw)	Capital	22161	52.26	21.02	1723
+620	Portugal	Lisboa (Lisbon)	Capital	22167	38.72	-9.14	2843
+630	Puerto Rico	San Juan	Capital	22177	18.41	-66.06	2475
+634	Qatar	Ad-Dawhah (Doha)	Capital	22179	25.25	51.60	567
+410	Republic of Korea	Seoul	Capital	21758	37.57	127.00	9736
+498	Republic of Moldova	Chi?in?u	Capital	21885	47.00	28.86	677
+638	Réion	Saint-Denis	Capital	22180	-20.87	55.45	145
+642	Romania	Bucuresti (Bucharest)	Capital	22191	44.44	26.10	1937
+643	Russian Federation	Moskva (Moscow)	Capital	22299	55.75	37.62	11621
+646	Rwanda	Kigali	Capital	22404	-1.96	30.04	1004
+654	Saint Helena	Jamestown	Capital	22405	-15.93	-5.73	1
+659	Saint Kitts and Nevis	Basseterre	Capital	22406	17.31	-62.73	12
+662	Saint Lucia	Castries	Capital	22408	14.03	-60.98	21
+666	Saint Pierre and Miquelon	Saint-Pierre	Capital	22409	46.80	-56.20	5
+670	Saint Vincent and the Grenadines	Kingstown	Capital	22410	13.16	-61.23	31
+882	Samoa	Apia	Capital	23236	-13.83	-171.76	37
+674	San Marino	San Marino	Capital	22411	43.94	12.43	4
+678	Sao Tome and Principe	SãToméapital	22412	0.36	6.73	64
+682	Saudi Arabia	Ar-Riyadh (Riyadh)	Capital	22432	24.64	46.77	5451
+686	Senegal	Dakar	Capital	22439	14.72	-17.48	3035
+688	Serbia	Beograd (Belgrade)	Capital	23241	44.81	20.47	1135
+690	Seychelles	Victoria	Capital	22444	-4.62	55.45	27
+694	Sierra Leone	Freetown	Capital	22445	8.49	-13.23	941
+702	Singapore	Singapore	Capital	22447	1.30	103.85	5188
+703	Slovakia	Bratislava	Capital	22448	48.16	17.13	434
+705	Slovenia	Ljubljana	Capital	22474	46.06	14.51	273
+90	Solomon Islands	Honiara	Capital	20311	-9.43	159.91	68
+706	Somalia	Muqdisho (Mogadishu)	Capital	22477	2.07	45.37	1554
+710	South Africa	15	Bloemfontein	Judiciary Capital	22479	-29.13	26.20	468
+710	South Africa	15	Cape Town	Legislative Capital	22481	-33.92	18.42	3562
+710	South Africa	15	Pretoria	Administrative Capital	22501	-25.75	28.20	1501
+728	South Sudan	Juba	Capital	22577	4.83	31.58	269
+724	Spain	Madrid	Capital	22549	40.42	-3.71	6574
+144	Sri Lanka	16	Colombo	Capital	20414	6.93	79.85	693
+144	Sri Lanka	16	Sri Jayewardenepura Kotte	Administrative Capital	20418	6.90	79.90	126
+729	Sudan	Al-Khartum (Khartoum)	Capital	22579	15.59	32.53	4632
+740	Suriname	Paramaribo	Capital	22587	5.85	-55.20	278
+748	Swaziland	17	Mbabane	Administrative Capital	22588	-26.32	31.13	66
+752	Sweden	Stockholm	Capital	22597	59.33	18.05	1385
+756	Switzerland	Bern	Capital	22601	46.92	7.47	353
+760	Syrian Arab Republic	Dimashq (Damascus)	Capital	22610	33.50	36.31	2650
+762	Tajikistan	Dushanbe	Capital	22615	38.63	68.85	739
+807	TFYR Macedonia	18	Skopje	Capital	22802	42.00	21.46	499
+764	Thailand	Krung Thep (Bangkok)	Capital	22617	13.75	100.52	8426
+626	Timor-Leste	Dili	Capital	22172	-8.58	125.58	180
+768	Togo	Loméapital	22628	6.17	1.35	1524
+776	Tonga	Nuku\'alofa	Capital	22630	-21.14	-175.22	25
+780	Trinidad and Tobago	Port of Spain	Capital	22631	10.65	-61.52	66
+788	Tunisia	Tunis	Capital	22646	36.80	10.18	790
+792	Turkey	Ankara	Capital	22656	39.92	32.83	4194
+795	Turkmenistan	Ashgabat	Capital	22739	37.95	58.38	683
+796	Turks and Caicos Islands	19	Cockburn Town	Capital	22742	21.47	-71.13	7
+798	Tuvalu	Funafuti	Capital	22743	-8.51	179.21	5
+800	Uganda	Kampala	Capital	22744	0.32	32.58	1659
+804	Ukraine	Kyiv (Kiev)	Capital	22765	50.44	30.52	2829
+784	United Arab Emirates	Abu Zaby (Abu Dhabi)	Capital	22632	24.46	54.36	942
+826	United Kingdom	London	Capital	22860	51.50	-0.12	9005
+834	United Republic of Tanzania	Dodoma	Capital	22895	-6.17	35.74	226
+840	United States of America	Washington D.C.	Capital	23174	38.88	-77.03	4705
+850	United States Virgin Islands	Charlotte Amalie	Capital	23190	18.34	-64.93	60
+858	Uruguay	Montevideo	Capital	23193	-34.87	-56.18	1672
+860	Uzbekistan	Tashkent	Capital	23209	41.32	69.25	2227
+548	Vanuatu	Port Vila	Capital	21956	-17.74	168.32	47
+862	Venezuela (Bolivarian Republic of)	Caracas	Capital	23217	10.50	-66.92	3242
+704	Viet Nam	Hàoi	Capital	22457	21.01	105.86	2955
+876	Wallis and Futuna Islands	Matu-Utu	Capital	23235	-13.28	-176.14	1
+732	Western Sahara	El Aaiúpital	22571	27.15	-13.20	237
+887	Yemen	Sana\'a\'	Capital	23239	15.38	44.21	2419
+894	Zambia	Lusaka	Capital	23277	-15.43	28.33	1802
+716	Zimbabwe	Harare	Capital	22513	-17.83	31.05	1542
