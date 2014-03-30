@@ -6,10 +6,21 @@
   "scripts": {
     "test": "test/test.js"
   },
-  "keywords": ["maps", "geojson", "svg"],
+  "keywords": [
+    "maps",
+    "geojson",
+    "svg"
+  ],
   "auther": "Gagan Bansal",
   "license": "MIT",
   "dependencies": {
-    "reproject": "~0.1.1"
+    "reproject": "~0.1.1",
+    "deep-extend": "~0.2.8",
+    "clone": "~0.1.11",
+    "proj4": "~2.1.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.17.1",
+    "chai": "~1.9.0"
   }
 }

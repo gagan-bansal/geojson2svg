@@ -5645,50 +5645,55 @@ function addAttributes(ele,attributes) {
   return part + ' />';
 }
 
-function point(geom,res,origin,attributes) {
-  var ele = '<circle cx="'+ (geom.coordinates[0] - origin.x)/res +'"'
-    + ' cy="'+ (origin.y - geom.coordinates[1])/res + '"';
-  ele +=' />';
-  if(attributes) ele = addAttributes(ele,attributes); 
-  return [ele];
+function point(geom,res,origin,opt) {
+  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
+     : false;
+  var path;
+  if(forcePath) {
+
+  } else {
+    path = getCoordString([geom.coordinates],res,origin);
+  }
+  return [path];
 }
 function multiPoint(geom,res,origin,attributes) {
-  return multi.explode(geom).map(function(single) {
-    return point(single,res,origin,attributes)[0];
-  });
+
 }
-function lineString(geom,res,origin,attributes) {
+function lineString(geom,res,origin,otp) {
   var coords = getCoordString(geom.coordinates,res,origin);
-  var ele = '<path d="M'+ coords + 'Z"';  
-  ele +=' />';
-  if(attributes) ele = addAttributes(ele,attributes); 
-  return [ele];
+  var path = 'M'+ coords;  
+  return [path];
 }
-function multiLineString(geom,res,origin,attributes) {
-  return multi.explode(geom).map(function(single) {
-    return lineString(single,res,origin,attributes)[0];
+function multiLineString(geom,res,origin,opt) {
+  var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
+  var paths = multi.explode(geom).map(function(single) {
+    return lineString(single,res,origin,opt)[0];
   });
+  if(!explode) return [paths.join(' ')]
+  return paths;
 }
-function polygon(geom,res,origin,attributes) {
+function polygon(geom,res,origin,opt) {
   var mainStr,holes,holeStr;
   mainStr = getCoordString(geom.coordinates[0],res,origin);
   if (geom.coordinates.length > 1) {
     holes = geom.coordinates.slice(1,geom.coordinates.length);
   }
-  var ele = '<path fill-rule="evenodd" d="M '+ mainStr;
+  var path = 'M'+ mainStr;
   if(holes) {
     for(var i=0;i<holes.length; i++) {
-      ele += ' M ' +  getCoordString(holes[i],res,origin);
+      path += ' M' +  getCoordString(holes[i],res,origin);
     }
   }
-  ele += 'Z " />';
-  if(attributes) ele = addAttributes(ele,attributes,origin); 
-  return [ele];
+  path += 'Z';
+  return [path];
 }
-function multiPolygon(geom,res,origin,attributes) {
-  return multi.explode(geom).map(function(single) {
-    return polygon(single,res,origin,attributes)[0];
+function multiPolygon(geom,res,origin,opt) {
+  var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
+  var paths = multi.explode(geom).map(function(single) {
+    return polygon(single,res,origin,opt)[0];
   });
+  if(!explode) return [paths.join(' ').replace('Z','') + 'Z'];
+  return paths;
 }
 module.exports = {
   Point: point,
@@ -5822,46 +5827,69 @@ g2svg.prototype.convertFeature = function(feature,options) {
   extend(opt,options);
   opt.attributes = opt.attributes || {};
   opt.attributes.id = opt.attributes.id || feature.id || null;
-  return this.convertGeometry(feature.geometry,opt.attributes);
+  return this.convertGeometry(feature.geometry,opt);
 };
-g2svg.prototype.convertGeometry = function(geom,attributes) {
+g2svg.prototype.convertGeometry = function(geom,opt) {
   if(converter[geom.type]) {
-    var outGeom;
+    var outGeom
+      ,opt = opt || {};
+
     if(this.inProjCode != this.outProjCode) {
-      console.log('outProj: ' + this.outProj.projName);
-      console.log('inProj: ' + this.inProj.projName);
       outGeom = this.reproject.reproject(geom,this.inProj,this.outProj);
     } else {
-      console.log('inProjCode: ' + this.inProjCode);
-      console.log('outProjCode: ' + this.outProjCode);
       outGeom = geom;
     }
-    var svgElements = converter[geom.type].call(this,outGeom,this.res,
+    var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
+    var paths = converter[geom.type].call(this,outGeom,this.res,
       {x:this.projectedMapExtent[0],y:this.projectedMapExtent[3]},
-      attributes
+      {explode:explode}
     );
-    test();
-    return svgElements;
+    var svgJsons,svgEles;
+    if(opt.output && opt.output.toLowerCase() == 'svg') {
+      svgJsons = paths.map(function(path) {
+        return pathToSvgJson(path,geom.type,opt.attributes);
+      });
+      svgEles = svgJsons.map(function(json) {
+        return jsonToSvgElement(json,geom.type);
+      });
+      return svgEles;
+    }
+    return paths;
   } else {
     return;
   }
 };
-function test() {
-  console.log('private method test'); 
-}
-g2svg.prototype.pathToSvgJSON = function(path,attributes) {
-  var svg = {d: path};
+var pathToSvgJson = function(path,type,attributes,opt) {
+  var svg = {};
+  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
+     : false;
+  if(type == 'Point' || type == 'MultiPoint' && !forcePath) {
+    svg['cx'] = path.split(',')[0];
+    svg['cy'] = path.split(',')[1];
+    svg['r'] = opt && opt.r ? opt.r : '2';
+  } else {
+    svg = {d: path};
+    if(type == 'Polygon' || type == 'MultiPolygon') {
+      svg['fill-rule'] == 'evenodd'; 
+    } 
+  }
   for (var key in attributes) {
     svg[key]= attributes[key];
   }
   return svg;
 };
-g2svg.prototype.jsonToSvgElement = function(json) {
+var jsonToSvgElement = function(json,type,opt) {
+  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
+     : false;
   var ele ='<path';
+  if(type == 'Point' || type == 'MultiPoint' && !forcePath) {
+    ele = '<circle';
+  }
   for(var key in json) {
     ele += ' ' + key +'="' + json[key] + '"';
   }
   ele += '/>';
+  return ele;
 };
 
 module.exports = g2svg;

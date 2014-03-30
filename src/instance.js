@@ -105,46 +105,69 @@ g2svg.prototype.convertFeature = function(feature,options) {
   extend(opt,options);
   opt.attributes = opt.attributes || {};
   opt.attributes.id = opt.attributes.id || feature.id || null;
-  return this.convertGeometry(feature.geometry,opt.attributes);
+  return this.convertGeometry(feature.geometry,opt);
 };
-g2svg.prototype.convertGeometry = function(geom,attributes) {
+g2svg.prototype.convertGeometry = function(geom,opt) {
   if(converter[geom.type]) {
-    var outGeom;
+    var outGeom
+      ,opt = opt || {};
+
     if(this.inProjCode != this.outProjCode) {
-      console.log('outProj: ' + this.outProj.projName);
-      console.log('inProj: ' + this.inProj.projName);
       outGeom = this.reproject.reproject(geom,this.inProj,this.outProj);
     } else {
-      console.log('inProjCode: ' + this.inProjCode);
-      console.log('outProjCode: ' + this.outProjCode);
       outGeom = geom;
     }
-    var svgElements = converter[geom.type].call(this,outGeom,this.res,
+    var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
+    var paths = converter[geom.type].call(this,outGeom,this.res,
       {x:this.projectedMapExtent[0],y:this.projectedMapExtent[3]},
-      attributes
+      {explode:explode}
     );
-    test();
-    return svgElements;
+    var svgJsons,svgEles;
+    if(opt.output && opt.output.toLowerCase() == 'svg') {
+      svgJsons = paths.map(function(path) {
+        return pathToSvgJson(path,geom.type,opt.attributes);
+      });
+      svgEles = svgJsons.map(function(json) {
+        return jsonToSvgElement(json,geom.type);
+      });
+      return svgEles;
+    }
+    return paths;
   } else {
     return;
   }
 };
-function test() {
-  console.log('private method test'); 
-}
-g2svg.prototype.pathToSvgJSON = function(path,attributes) {
-  var svg = {d: path};
+var pathToSvgJson = function(path,type,attributes,opt) {
+  var svg = {};
+  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
+     : false;
+  if(type == 'Point' || type == 'MultiPoint' && !forcePath) {
+    svg['cx'] = path.split(',')[0];
+    svg['cy'] = path.split(',')[1];
+    svg['r'] = opt && opt.r ? opt.r : '2';
+  } else {
+    svg = {d: path};
+    if(type == 'Polygon' || type == 'MultiPolygon') {
+      svg['fill-rule'] == 'evenodd'; 
+    } 
+  }
   for (var key in attributes) {
     svg[key]= attributes[key];
   }
   return svg;
 };
-g2svg.prototype.jsonToSvgElement = function(json) {
+var jsonToSvgElement = function(json,type,opt) {
+  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
+     : false;
   var ele ='<path';
+  if(type == 'Point' || type == 'MultiPoint' && !forcePath) {
+    ele = '<circle';
+  }
   for(var key in json) {
     ele += ' ' + key +'="' + json[key] + '"';
   }
   ele += '/>';
+  return ele;
 };
 
 module.exports = g2svg;

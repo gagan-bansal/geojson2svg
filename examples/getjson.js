@@ -1,8 +1,8 @@
 //code from https://developer.mozilla.org/en-US/docs/AJAX/Getting_Started
 (function() {
-  var httpRequest;
-  var handler;
   var makeRequest = function(url,callback,opt) {
+    var httpRequest;
+    var handler;
     if (window.XMLHttpRequest) { // Mozilla, Safari, ...
       httpRequest = new XMLHttpRequest();
     } else if (window.ActiveXObject) { // IE
@@ -25,18 +25,18 @@
     httpRequest.onreadystatechange = success;
     httpRequest.open('GET', url);
     httpRequest.send();
-  }
-
-  function success() {
-    if (httpRequest.readyState === 4) {
-      if (httpRequest.status === 200) {
-        console.log(httpRequest.responseText.type);
-        handler.call(this,httpRequest.responseText);
-      } else {
-        alert('There was a problem with the request.');
+    function success() {
+      if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 200) {
+          console.log(httpRequest.responseText.type);
+          handler.call(this,httpRequest.responseText);
+        } else {
+          alert('There was a problem with the request.');
+       }
       }
     }
   }
+
   if(window) {
     window.getjson = makeRequest;
   } 
