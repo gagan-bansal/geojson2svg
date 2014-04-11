@@ -7,7 +7,6 @@ var geojson2svg = function(viewportSize,options) {
 
 if(typeof module !== 'undefined' && module.exports) {
   module.exports = geojson2svg;
-}
-if(window) {
+} else if(window !== 'undefined') {
   window.geojson2svg = geojson2svg;
 }

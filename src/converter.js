@@ -8,7 +8,6 @@ function getCoordString(coords,res,origin) {
   return coordStr.join(' ');
 }
 function addAttributes(ele,attributes) {
-  console.log('adding attr');
   var part = ele.split('/>')[0];
   for(var key in attributes) {
     if(attributes[key]) {
@@ -19,17 +18,19 @@ function addAttributes(ele,attributes) {
 }
 
 function point(geom,res,origin,opt) {
-  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
-     : false;
-  var path;
-  if(forcePath) {
-
-  } else {
-    path = getCoordString([geom.coordinates],res,origin);
-  }
+  var r = opt && opt.r ? opt.r : 1;
+  var path = 'M' + getCoordString([geom.coordinates],res,origin)
+    +' m'+ -r+ ',0'+ ' a'+r+','+ r + ' 0 1,1 '+ 2*r + ','+0
+    +' a'+r+','+ r + ' 0 1,1 '+ -2*r + ','+0;
   return [path];
 }
-function multiPoint(geom,res,origin,attributes) {
+function multiPoint(geom,res,origin,opt) {
+  var explode = opt && opt.hasOwnProperty('explode') ? opt.explode : false;
+  var paths = multi.explode(geom).map(function(single) {
+    return point(single,res,origin,opt)[0];
+  });
+  if(!explode) return [paths.join(' ')]
+  return paths;
 
 }
 function lineString(geom,res,origin,otp) {
@@ -38,7 +39,7 @@ function lineString(geom,res,origin,otp) {
   return [path];
 }
 function multiLineString(geom,res,origin,opt) {
-  var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
+  var explode = opt && opt.hasOwnProperty('explode') ? opt.explode : false;
   var paths = multi.explode(geom).map(function(single) {
     return lineString(single,res,origin,opt)[0];
   });
@@ -65,7 +66,7 @@ function multiPolygon(geom,res,origin,opt) {
   var paths = multi.explode(geom).map(function(single) {
     return polygon(single,res,origin,opt)[0];
   });
-  if(!explode) return [paths.join(' ').replace('Z','') + 'Z'];
+  if(!explode) return [paths.join(' ').replace(/Z/g,'') + 'Z'];
   return paths;
 }
 module.exports = {
