@@ -144,7 +144,6 @@ function getCoordString(coords,res,origin) {
   return coordStr.join(' ');
 }
 function addAttributes(ele,attributes) {
-  console.log('adding attr');
   var part = ele.split('/>')[0];
   for(var key in attributes) {
     if(attributes[key]) {
@@ -155,17 +154,19 @@ function addAttributes(ele,attributes) {
 }
 
 function point(geom,res,origin,opt) {
-  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
-     : false;
-  var path;
-  if(forcePath) {
-
-  } else {
-    path = getCoordString([geom.coordinates],res,origin);
-  }
+  var r = opt && opt.r ? opt.r : 1;
+  var path = 'M' + getCoordString([geom.coordinates],res,origin)
+    +' m'+ -r+ ',0'+ ' a'+r+','+ r + ' 0 1,1 '+ 2*r + ','+0
+    +' a'+r+','+ r + ' 0 1,1 '+ -2*r + ','+0;
   return [path];
 }
-function multiPoint(geom,res,origin,attributes) {
+function multiPoint(geom,res,origin,opt) {
+  var explode = opt && opt.hasOwnProperty('explode') ? opt.explode : false;
+  var paths = multi.explode(geom).map(function(single) {
+    return point(single,res,origin,opt)[0];
+  });
+  if(!explode) return [paths.join(' ')]
+  return paths;
 
 }
 function lineString(geom,res,origin,otp) {
@@ -174,7 +175,7 @@ function lineString(geom,res,origin,otp) {
   return [path];
 }
 function multiLineString(geom,res,origin,opt) {
-  var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
+  var explode = opt && opt.hasOwnProperty('explode') ? opt.explode : false;
   var paths = multi.explode(geom).map(function(single) {
     return lineString(single,res,origin,opt)[0];
   });
@@ -201,7 +202,7 @@ function multiPolygon(geom,res,origin,opt) {
   var paths = multi.explode(geom).map(function(single) {
     return polygon(single,res,origin,opt)[0];
   });
-  if(!explode) return [paths.join(' ').replace('Z','') + 'Z'];
+  if(!explode) return [paths.join(' ').replace(/Z/g,'') + 'Z'];
   return paths;
 }
 module.exports = {
@@ -267,15 +268,16 @@ g2svg.prototype.convertFeature = function(feature,options) {
 g2svg.prototype.convertGeometry = function(geom,opt) {
   if(converter[geom.type]) {
     var opt = opt || {};
-    var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
-    var paths = converter[geom.type].call(this,geom,this.res,
+    //var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
+    var paths = converter[geom.type].call(this,geom,
+      this.res,
       {x:this.mapExtent.left,y:this.mapExtent.top},
-      {explode:explode}
+      opt
     );
     var svgJsons,svgEles;
     if(opt.output && opt.output.toLowerCase() == 'svg') {
       svgJsons = paths.map(function(path) {
-        return pathToSvgJson(path,geom.type,opt.attributes);
+        return pathToSvgJson(path,geom.type,opt.attributes,opt);
       });
       svgEles = svgJsons.map(function(json) {
         return jsonToSvgElement(json,geom.type);
@@ -290,11 +292,11 @@ g2svg.prototype.convertGeometry = function(geom,opt) {
 var pathToSvgJson = function(path,type,attributes,opt) {
   var svg = {};
   var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
-     : false;
-  if(type == 'Point' || type == 'MultiPoint' && !forcePath) {
+     : true;
+  if((type == 'Point' || type == 'MultiPoint') && !forcePath) {
     svg['cx'] = path.split(',')[0];
     svg['cy'] = path.split(',')[1];
-    svg['r'] = opt && opt.r ? opt.r : '2';
+    svg['r'] = opt && opt.r ? opt.r : '1';
   } else {
     svg = {d: path};
     if(type == 'Polygon' || type == 'MultiPolygon') {
@@ -308,9 +310,9 @@ var pathToSvgJson = function(path,type,attributes,opt) {
 };
 var jsonToSvgElement = function(json,type,opt) {
   var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
-     : false;
+     : true;
   var ele ='<path';
-  if(type == 'Point' || type == 'MultiPoint' && !forcePath) {
+  if((type == 'Point' || type == 'MultiPoint') && !forcePath) {
     ele = '<circle';
   }
   for(var key in json) {
@@ -332,9 +334,12 @@ var geojson2svg = function(viewportSize,options) {
 
 if(typeof module !== 'undefined' && module.exports) {
   module.exports = geojson2svg;
-}
-if(window) {
+} 
+if(window !== 'undefined') {
   window.geojson2svg = geojson2svg;
 }
 
 },{"./instance.js":4,"deep-extend":1}]},{},[5])
+
+
+//# sourceMappingURL=geojson2svg.js.map
