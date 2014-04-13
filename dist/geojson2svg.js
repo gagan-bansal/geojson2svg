@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var o;"undefined"!=typeof window?o=window:"undefined"!=typeof global?o=global:"undefined"!=typeof self&&(o=self),o.geojson2svg=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 /*!
  * Node.JS module "Deep Extend"
  * @description Recursive object extending.
@@ -82,7 +82,7 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
     return target;
 }
 
-},{}],2:[function(require,module,exports){
+},{}],2:[function(_dereq_,module,exports){
 //index.js 
 (function() { 
 	var singles = ['Point', 'LineString', 'Polygon'];
@@ -133,9 +133,9 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 	}
 })();
 
-},{}],3:[function(require,module,exports){
+},{}],3:[function(_dereq_,module,exports){
 //converter.js
-var multi = require('multigeojson');
+var multi = _dereq_('multigeojson');
 function getCoordString(coords,res,origin) {
   //origin - svg image origin 
   var coordStr = coords.map(function(coord) {
@@ -214,9 +214,9 @@ module.exports = {
   MultiPolygon: multiPolygon
 };
 
-},{"multigeojson":2}],4:[function(require,module,exports){
-var extend = require('deep-extend'),
-	converter = require('./converter.js');
+},{"multigeojson":2}],4:[function(_dereq_,module,exports){
+var extend = _dereq_('deep-extend'),
+	converter = _dereq_('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
 var g2svg = function(viewportSize,opt) {
@@ -324,22 +324,18 @@ var jsonToSvgElement = function(json,type,opt) {
 
 module.exports = g2svg;
 
-},{"./converter.js":3,"deep-extend":1}],5:[function(require,module,exports){
-var extend = require('deep-extend');
-var g2svg = require('./instance.js');
+},{"./converter.js":3,"deep-extend":1}],5:[function(_dereq_,module,exports){
+var g2svg = _dereq_('./instance.js');
 var geojson2svg = function(viewportSize,options) {
   if(!viewportSize) return;
   return new g2svg(viewportSize,options);
 };
 
-if(typeof module !== 'undefined' && module.exports) {
-  module.exports = geojson2svg;
-} 
-if(window !== 'undefined') {
-  window.geojson2svg = geojson2svg;
-}
+module.exports = geojson2svg;
 
-},{"./instance.js":4,"deep-extend":1}]},{},[5])
+},{"./instance.js":4}]},{},[5])
 
+(5)
+});
 
 //# sourceMappingURL=geojson2svg.js.map

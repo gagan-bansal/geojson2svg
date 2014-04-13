@@ -1,12 +1,10 @@
-//(function() {
-  var dataURLPoly = 'http://54.255.134.125:3005/examples/data/countries.geo.json';
-  //var dataURL = 'http://54.255.134.125:3005/examples/data/CAN.geo.json';
-  var dataURLPoint = 'http://54.255.134.125:3005/examples/data/capitals.json';
+  var dataURLPoly = './data/countries.geo.json';
+  //var dataURL = './data/CAN.geo.json';
+  var dataURLPoint = './data/capitals.json';
   getjson(dataURLPoint,drawGeoJSON);
   getjson(dataURLPoly,drawGeoJSON);
   
   function drawGeoJSON(resp) {
-    console.log('i am drawing');
     var geojson = JSON.parse(resp);
     var svgMap = document.getElementById('map');
     var convertor = geojson2svg({width:800,height:800});
@@ -30,4 +28,3 @@
             frag.appendChild(div.firstChild.firstChild);
         return frag;
     }
-//})();
