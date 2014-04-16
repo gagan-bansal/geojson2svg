@@ -1,12 +1,13 @@
 var extend = require('deep-extend'),
+  clone = require('clone'),
 	converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
-var g2svg = function(viewportSize,opt) {
+var g2svg = function(viewportSize,options) {
   if(!viewportSize) return;
   this.viewportSize = viewportSize;
-  var opt = opt || {};
-  this.mapExtent = opt.mapExtent 
+  this.options = options || {};
+  this.mapExtent = this.options.mapExtent 
     || {'left':-180,'bottom':-90,'right':180,'top':90}; 
   this.res = this.calResolution(this.mapExtent,this.viewportSize);
 };
@@ -16,41 +17,40 @@ g2svg.prototype.calResolution = function(extent,size) {
   return Math.max(xres,yres);
 };
 g2svg.prototype.convert = function(geojson,options)  {
-  var options = options || {};
+  var opt = extend(clone(this.options), options || {});
   var multiGeometries = ['MultiPoint','MultiLineString','MultiPolygon'];
   var geometries = ['Point', 'LineString', 'Polygon'];
   var svgElements = [];
   if (geojson.type == 'FeatureCollection') {
     for(var i=0; i< geojson.features.length; i++) {
       svgElements = svgElements.concat(
-        this.convertFeature(geojson.features[i],options));
+        this.convertFeature(geojson.features[i],opt));
     }
   } else if (geojson.type == 'Feature') {
-    svgElements = this.convertFeature(geojson,options);
+    svgElements = this.convertFeature(geojson,opt);
   } else if (geojson.type == 'GeomtryCollection') {
     for(var i=0; i< geojson.geometries.length; i++) {
       svgElements = svgElements.concat(
-        this.convertGeometry(geojson.geometries[i],options));
+        this.convertGeometry(geojson.geometries[i],opt));
     }
   } else if (converter[geojson.type]) {
-    svgElements = this.convertGeometry(geojson,options);
+    svgElements = this.convertGeometry(geojson,opt);
   } else {
     return;
   }
-  if(options.callback) options.callback.call(this,svgElements);
+  if(opt.callback) opt.callback.call(this,svgElements);
   return svgElements;
 };
 g2svg.prototype.convertFeature = function(feature,options) {
-  if(!feature.geometry) return;
-  var opt = {};
-  extend(opt,options);
+  if(!feature && !feature.geometry) return;
+  var opt = extend(clone(this.options), options || {});
   opt.attributes = opt.attributes || {};
   opt.attributes.id = opt.attributes.id || feature.id || null;
   return this.convertGeometry(feature.geometry,opt);
 };
-g2svg.prototype.convertGeometry = function(geom,opt) {
+g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
-    var opt = opt || {};
+    var opt = extend(clone(this.options), options || {});
     //var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
     var paths = converter[geom.type].call(this,geom,
       this.res,

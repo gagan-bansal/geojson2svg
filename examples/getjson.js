@@ -28,7 +28,6 @@
     function success() {
       if (httpRequest.readyState === 4) {
         if (httpRequest.status === 200) {
-          console.log(httpRequest.responseText.type);
           handler.call(this,httpRequest.responseText);
         } else {
           alert('There was a problem with the request.');

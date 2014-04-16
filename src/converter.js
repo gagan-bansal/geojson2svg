@@ -29,7 +29,7 @@ function multiPoint(geom,res,origin,opt) {
   var paths = multi.explode(geom).map(function(single) {
     return point(single,res,origin,opt)[0];
   });
-  if(!explode) return [paths.join(' ')]
+  if(!explode) return [paths.join(' ')];
   return paths;
 
 }
@@ -43,7 +43,7 @@ function multiLineString(geom,res,origin,opt) {
   var paths = multi.explode(geom).map(function(single) {
     return lineString(single,res,origin,opt)[0];
   });
-  if(!explode) return [paths.join(' ')]
+  if(!explode) return [paths.join(' ')];
   return paths;
 }
 function polygon(geom,res,origin,opt) {
