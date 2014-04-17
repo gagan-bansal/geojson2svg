@@ -1,6 +1,8 @@
 'use strict';
 var testDataSets = [];
 var extend = require('deep-extend');
+var basics = ['Point', 'LineString', 'Polygon', 'MultiPoint', 'MultiLineString',
+ 'MultiPolygon'];
 testDataSets.push(require('./testdata1.js'));
 //testDataSets.push(require('./testdata2.js'));
 //var expect = require('expect.js'),
@@ -49,6 +51,28 @@ describe('geojson2svg', function() {
         testSVG(actualSVGs,testData.feature.svg,
           testData.feature.geojson.geometry.type,
           precision);
+      });
+      it('Feature {output: "path",explode: true}', function() {
+        if(basics.indexOf(testData.feature.geojson.type) > -1) {
+          var actualPaths = converter.convert(testData.feature.geojson,
+            {output:'path',explode:true});
+          testPath(actualPaths,testData.feature.path_explode,
+            testData.feature.geojson.type,
+            precision);
+        }
+      });
+      it('Feature {output: "svg",explode: true}', function() {
+        if(basics.indexOf(testData.feature.geojson.type) > -1) {
+          var actualSVGs = converter.convert(testData.feature.geojson,
+            {
+              output:'svg',
+              explode:true,
+              attributes: { id: 'id1',style:'stroke: #000066; fill: 3333ff;' }
+            });
+          testSVG(actualSVGs,testData.feature.svg,
+            testData.feature.geojson.geometry.type,
+            precision);
+        }
       });
       it('FeatureCollection {output: "path",explode: false}', function() {
         var actualPaths = converter.convert(testData.featureCollection.geojson,
