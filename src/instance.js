@@ -1,5 +1,4 @@
 var extend = require('deep-extend'),
-  clone = require('clone'),
 	converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
@@ -17,7 +16,7 @@ g2svg.prototype.calResolution = function(extent,size) {
   return Math.max(xres,yres);
 };
 g2svg.prototype.convert = function(geojson,options)  {
-  var opt = extend(clone(this.options), options || {});
+  var opt = extend(extend({},this.options), options || {});
   var multiGeometries = ['MultiPoint','MultiLineString','MultiPolygon'];
   var geometries = ['Point', 'LineString', 'Polygon'];
   var svgElements = [];
@@ -43,14 +42,14 @@ g2svg.prototype.convert = function(geojson,options)  {
 };
 g2svg.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
-  var opt = extend(clone(this.options), options || {});
+  var opt = extend(extend({},this.options), options || {});
   opt.attributes = opt.attributes || {};
   opt.attributes.id = opt.attributes.id || feature.id || null;
   return this.convertGeometry(feature.geometry,opt);
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
-    var opt = extend(clone(this.options), options || {});
+    var opt = extend(extend({},this.options), options || {});
     //var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
     var paths = converter[geom.type].call(this,geom,
       this.res,

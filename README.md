@@ -76,6 +76,18 @@ var pathData = converter.convert(
 **Options for each geojson:**
 
   **output, exlpode, attributes, pointAsCircle, r** if passed in **convert** function along with each geojson overrides the main options
-  
+## Developing
+Once you run
+ 
+```npm isntall```
+
+then for running test 
+
+```npm run test```
+
+to create build
+
+```npm run build```
+
 ##License
 This project is licensed under the terms of the MIT license.

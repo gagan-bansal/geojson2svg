@@ -1,10 +1,14 @@
 {
   "name": "geojson2svg",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Converts geojson to svg/path string given svg viewport size and maps extent.",
   "main": "src/main.js",
   "scripts": {
-    "test": "test/test.js"
+    "test": "mocha",
+    "build-debug": "browserify src/main.js --debug --standalone geojson2svg | exorcist dist/geojson2svg.js.map > dist/geojson2svg.js",
+    "build-min": "browserify src/main.js --standalone geojson2svg | uglifyjs -c > dist/geojson2svg.min.js",
+    "build": "npm run build-debug && npm run build-min",
+    "watch": "watchify src/main.js --debug --standalone geojson2svg -o dist/geojson2svg.js -v" 
   },
   "keywords": [
     "maps",
@@ -18,18 +22,16 @@
   "auther": "Gagan Bansal",
   "license": "MIT",
   "dependencies": {
-    "clone": "~0.1.11",
     "deep-extend": "~0.2.8",
     "multigeojson": "0.0.0"
   },
   "devDependencies": {
-    "mocha": "~1.17.1",
+    "browserify": "^3.46.0",
     "chai": "~1.9.0",
+    "jsdom": "~0.10.5",
+    "mocha": "~1.17.1",
     "parse-svg-path": "~0.1.1",
-    "expect.js": "~0.3.1",
-    "jsdom": "~0.10.5"
-  },
-  "scripts": {
-    "test": "mocha"
+    "uglify-js": "^2.4.13",
+    "watchify": "^0.8.3"
   }
 }
