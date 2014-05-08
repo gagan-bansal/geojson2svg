@@ -6,9 +6,9 @@ Using in node.js or with browserify
 ```
 npm install geojson2svg
 ```
-For including in html page standard way, download file dist/geojson2svg.js
+For including in html page standard way, download file dist/geojson2svg.min.js
 ```html
-<script type="text/javascipt" src="path/to/geojson2svg.js"></script>
+<script type="text/javascipt" src="path/to/geojson2svg.min.js"></script>
 ```
 This create a global variable 'geojson2svg'
 ## Usage
