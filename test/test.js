@@ -1,6 +1,6 @@
 'use strict';
 var testDataSets = [];
-var extend = require('deep-extend');
+var extend = require('xtend');
 var basics = ['Point', 'LineString', 'Polygon', 'MultiPoint', 'MultiLineString',
  'MultiPolygon'];
 testDataSets.push(require('./testdata1.js'));
@@ -28,8 +28,9 @@ describe('geojson2svg', function() {
           testPath(actualPaths,data.path,data.geojson.type,precision);
 	      });
         it(data.type + ' {output: "svg",explode: false,r:2}',function() {
+          debugger;
           var options = {output:'svg'};
-          extend(options,testData.options);
+          options = extend(options,testData.options);
           var actualSVGs = converter.convert(data.geojson,options);
           testSVG(actualSVGs,data.svg,data.geojson.type,precision);
         });
@@ -94,8 +95,8 @@ function testSVG(actualSVGs,expSVGs,type,precision) {
   expect(actualSVGs.length).to.be.equal(expSVGs.length);
   var expSVGEle,actSVGEle,expPaths,actPaths;
   for(var i=0;i<expSVGs.length; i++) {
-    expSVGEle = jsdom(expSVGs).firstChild;
-    actSVGEle = jsdom(actualSVGs).firstChild;
+    expSVGEle = jsdom(expSVGs).firstChild.children[1].children[0];
+    actSVGEle = jsdom(actualSVGs).firstChild.children[1].children[0];
     expect(actSVGEle.nodeName).to.be.equal('PATH');
     expect(actSVGEle.hasAttribute('d')).to.be.true;
     expPaths = expSVGEle.getAttribute('d');

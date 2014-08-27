@@ -1,88 +1,4 @@
-!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var o;"undefined"!=typeof window?o=window:"undefined"!=typeof global?o=global:"undefined"!=typeof self&&(o=self),o.geojson2svg=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-/*!
- * Node.JS module "Deep Extend"
- * @description Recursive object extending.
- * @author Viacheslav Lotsmanov (unclechu) <lotsmanov89@gmail.com>
- * @license MIT
- *
- * The MIT License (MIT)
- *
- * Copyright (c) 2013 Viacheslav Lotsmanov
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-/**
- * Extening object that entered in first argument.
- * Returns extended object or false if have no target object or incorrect type.
- * If you wish to clone object, simply use that:
- *  deepExtend({}, yourObj_1, [yourObj_N]) - first arg is new empty object
- */
-var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
-    if (arguments.length < 1 || typeof arguments[0] !== 'object') {
-        return false;
-    }
-
-    if (arguments.length < 2) return arguments[0];
-
-    var target = arguments[0];
-
-    // convert arguments to array and cut off target object
-    var args = Array.prototype.slice.call(arguments, 1);
-
-    var key, val, src, clone;
-
-    args.forEach(function (obj) {
-        if (typeof obj !== 'object') return;
-
-        for (key in obj) {
-            if ( ! (key in obj)) continue;
-
-            src = target[key];
-            val = obj[key];
-
-            if (val === target) continue;
-
-            if (typeof val !== 'object' || val === null) {
-                target[key] = val;
-                continue;
-            }
-
-            if (typeof src !== 'object' || src === null) {
-                clone = (Array.isArray(val)) ? [] : {};
-                target[key] = deepExtend(clone, val);
-                continue;
-            }
-
-            if (Array.isArray(val)) {
-                clone = (Array.isArray(src)) ? src : [];
-            } else {
-                clone = (!Array.isArray(src)) ? src : {};
-            }
-
-            target[key] = deepExtend(clone, val);
-        }
-    });
-
-    return target;
-}
-
-},{}],2:[function(_dereq_,module,exports){
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var o;"undefined"!=typeof window?o=window:"undefined"!=typeof global?o=global:"undefined"!=typeof self&&(o=self),o.geojson2svg=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 //index.js 
 (function() { 
 	var singles = ['Point', 'LineString', 'Polygon'];
@@ -133,9 +49,28 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 	}
 })();
 
-},{}],3:[function(_dereq_,module,exports){
+},{}],2:[function(require,module,exports){
+module.exports = extend
+
+function extend() {
+    var target = {}
+
+    for (var i = 0; i < arguments.length; i++) {
+        var source = arguments[i]
+
+        for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+                target[key] = source[key]
+            }
+        }
+    }
+
+    return target
+}
+
+},{}],3:[function(require,module,exports){
 //converter.js
-var multi = _dereq_('multigeojson');
+var multi = require('multigeojson');
 function getCoordString(coords,res,origin) {
   //origin - svg image origin 
   var coordStr = coords.map(function(coord) {
@@ -214,10 +149,9 @@ module.exports = {
   MultiPolygon: multiPolygon
 };
 
-},{"multigeojson":2}],4:[function(_dereq_,module,exports){
-var extend = _dereq_('deep-extend'),
-  //clone = require('clone'),
-	converter = _dereq_('./converter.js');
+},{"multigeojson":1}],4:[function(require,module,exports){
+var extend = require('xtend'),
+	converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
 var g2svg = function(viewportSize,options) {
@@ -324,8 +258,8 @@ var jsonToSvgElement = function(json,type,opt) {
 
 module.exports = g2svg;
 
-},{"./converter.js":3,"deep-extend":1}],5:[function(_dereq_,module,exports){
-var g2svg = _dereq_('./instance.js');
+},{"./converter.js":3,"xtend":2}],5:[function(require,module,exports){
+var g2svg = require('./instance.js');
 var geojson2svg = function(viewportSize,options) {
   if(!viewportSize) return;
   return new g2svg(viewportSize,options);
@@ -333,9 +267,8 @@ var geojson2svg = function(viewportSize,options) {
 
 module.exports = geojson2svg;
 
-},{"./instance.js":4}]},{},[5])
-
-(5)
+},{"./instance.js":4}]},{},[5])(5)
 });
+
 
 //# sourceMappingURL=geojson2svg.js.map

@@ -1,4 +1,4 @@
-var extend = require('deep-extend'),
+var extend = require('xtend'),
 	converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
