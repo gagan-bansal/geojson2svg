@@ -6,8 +6,13 @@ var g2svg = function(viewportSize,options) {
   if(!viewportSize) return;
   this.viewportSize = viewportSize;
   this.options = options || {};
-  this.mapExtent = this.options.mapExtent 
-    || {'left':-180,'bottom':-90,'right':180,'top':90}; 
+  this.mapExtent = this.options.mapExtent ||
+    {
+      left: -20037508.342789244,
+      right: 20037508.342789244,
+      bottom: -20037508.342789244,
+      top: 20037508.342789244
+    };
   this.res = this.calResolution(this.mapExtent,this.viewportSize);
 };
 g2svg.prototype.calResolution = function(extent,size) {
@@ -50,14 +55,14 @@ g2svg.prototype.convertFeature = function(feature,options) {
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
     var opt = extend(extend({},this.options), options || {});
-    //var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
+    var output = opt.output || 'svg';
     var paths = converter[geom.type].call(this,geom,
       this.res,
       {x:this.mapExtent.left,y:this.mapExtent.top},
       opt
     );
     var svgJsons,svgEles;
-    if(opt.output && opt.output.toLowerCase() == 'svg') {
+    if (output.toLowerCase() == 'svg') {
       svgJsons = paths.map(function(path) {
         return pathToSvgJson(path,geom.type,opt.attributes,opt);
       });
@@ -65,8 +70,9 @@ g2svg.prototype.convertGeometry = function(geom,options) {
         return jsonToSvgElement(json,geom.type);
       });
       return svgEles;
+    } else {
+      return paths;
     }
-    return paths;
   } else {
     return;
   }
