@@ -1,7 +1,10 @@
 module.exports = {
   desc: 'input data is goegraphic coordinates',
   svgSize: {width: 200, height: 100},
-  options: {r:2},
+  options: {
+    r:2,
+    mapExtent: {left: -180, bottom: -90, right: -180, top: 90}
+  },
   precision: 0.00000001,
   
   geojsons: [

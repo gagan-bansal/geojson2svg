@@ -1,15 +1,19 @@
 <html>
   <head>
+    <title>Example of world map created with geojson2svg</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js"></script>
+    <script type="text/javascript" src="./reproject.min.js"></script>
     <script type="text/javascript" src="./getjson.js"></script>
     <script type="text/javascript" src="../dist/geojson2svg.min.js"></script>
   </head>
   <body>
-    <h2>World Map</h2>
+    <h2>Example of world map created with geojson2svg</h2>
     <div id="mapArea" style="width:800px;height:800px;">
       <svg id="map" xmlns="http://www.w3.org/2000/svg"
         width="800" height="800" x="0" y="0" >
       </svg>
     </div>
+    <p><a href="https://github.com/johan/world.geo.json">Countries source geojson's</a> longitude value 180 or -180 is replaced with 179.9999999 and -179.9999999 to avoide the dateline wrap. 
     <script type="text/javascript" src="./world.js"></script>
   </body>
 </html>

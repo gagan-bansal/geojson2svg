@@ -6,12 +6,21 @@ getjson(dataURLPoly,drawGeoJSON);
 
 function drawGeoJSON(resp) {
   var geojson = JSON.parse(resp);
+  // covert wgs84 data to Web Mercator projection
+  var geojson3857 = reproject.reproject(
+    geojson,'EPSG:4326','EPSG:3857',proj4.defs);
   var svgMap = document.getElementById('map');
-  var convertor = geojson2svg({width:800,height:800});
-  var attributes = {
-    'style': 'stroke:#006600; fill: #F0F8FF;stroke-width:0.5px;',
-    'vector-effect':'non-scaling-stroke'};
-  var svgElements = convertor.convert(geojson,{attributes:attributes,output:'svg',explode:false});
+  var convertor = geojson2svg(
+    {width:800,height:800},
+    { 
+      attributes: {
+        'style': 'stroke:#006600; fill: #F0F8FF;stroke-width:0.5px;',
+        'vector-effect':'non-scaling-stroke'
+      },
+      explode: false
+    }
+  );
+  var svgElements = convertor.convert(geojson3857);
   var parser = new DOMParser();
   svgElements.forEach(function(svgStr) {
     var svg = parseSVG(svgStr);
