@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>Example of color coded map created with geojson2svg</title>
+    <link rel="stylesheet" type="text/css" href="./css/example.css" />
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js"></script>
+    <script type="text/javascript" src="https://raw.githubusercontent.com/gagan-bansal/extend-geojson-properties/master/index.js"></script>
+    <script type="text/javascript" src="https://raw.githubusercontent.com/gagan-bansal/parse-svg/master/parse-svg.min.js"></script>
+    <script type="text/javascript" src="./js/reproject.min.js"></script>
+    <script type="text/javascript" src="./js/getjson.js"></script>
+    <script type="text/javascript" src="../dist/geojson2svg.min.js"></script>
+  </head>
+  <body>
+    <h2>Example of world map created with geojson2svg</h2>
+    <p>Population wise color coded map. 
+      Pink countries with population more than 50,000,000 and
+      skyblue countries with population less than or equal 50,000,000
+      <p>
+    <div id="mapArea" style="width:800px;height:800px;">
+      <svg id="map" xmlns="http://www.w3.org/2000/svg"
+        width="800" height="800" x="0" y="0" >
+      </svg>
+    </div>
+    <p><a href="https://github.com/johan/world.geo.json">Countries source geojson's</a> longitude value 180 or -180 is replaced with 179.9999999 and -179.9999999 to avoide the dateline wrap. 
+    </p>
+    <p><a href="http://peric.github.io/GetCountries/">In countries population data </a> "United States" is renamed to "United States of America".</p> 
+    </p>
+    <script type="text/javascript" src="./js/world-pop.js"></script>
+  </body>
+</html>
