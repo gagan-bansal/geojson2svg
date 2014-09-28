@@ -1,5 +1,5 @@
 # geojson2svg
-Converts geojson to svg string given svg viewport size and maps extent.
+Converts geojson to svg string given svg viewport size and maps extent. Check [world map](https://rawgit.com/gagan-bansal/geojson2svg/master/examples/world.html) and [color coded map](https://rawgit.com/gagan-bansal/geojson2svg/master/examples/world-pop.html) examples to demostrate that its very easy to convert geojson into map.
 
 ## Installation
 Using in node.js or with browserify
