@@ -1,0 +1,10 @@
+.more {
+  stroke: red;
+  fill: pink;
+  stroke-width: 0.5px;
+}
+.less {
+  stroke: blue;
+  fill: skyblue;
+  stroke-width: 0.5px;
+}
