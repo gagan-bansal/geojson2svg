@@ -1,24 +1,31 @@
 var extend = require('xtend'),
 	converter = require('./converter.js');
 
+
+
 //g2svg as geojson2svg (shorthand)
 var g2svg = function(viewportSize,options) {
   if(!viewportSize) return;
   this.viewportSize = viewportSize;
   this.options = options || {};
-  this.mapExtent = this.options.mapExtent ||
-    {
-      left: -20037508.342789244,
-      right: 20037508.342789244,
-      bottom: -20037508.342789244,
-      top: 20037508.342789244
-    };
+  this.mapExtent = this.options.mapExtent 
+    || {'left':-180,'bottom':-90,'right':180,'top':90}; 
   this.res = this.calResolution(this.mapExtent,this.viewportSize);
 };
 g2svg.prototype.calResolution = function(extent,size) {
-  var xres = (extent.right - extent.left)/size.width;
-  var yres = (extent.top - extent.bottom)/size.height;
-  return Math.max(xres,yres);
+    if(this.options.coordinateConversion)  {
+        var newExtentNE = this.options.coordinateConversion(extent.top, extent.right);
+        var newExtentSW = this.options.coordinateConversion(extent.bottom, extent.left);
+        var xres = (newExtentNE[0] - newExtentSW[0])/size.width;
+        var yres = (newExtentNE[1] - newExtentSW[1])/size.height;
+        return Math.max(xres,yres);
+    } else{
+        var xres = (extent.right - extent.left)/size.width;
+         var yres = (extent.top - extent.bottom)/size.height;
+         return Math.max(xres,yres);
+    }
+
+
 };
 g2svg.prototype.convert = function(geojson,options)  {
   var opt = extend(extend({},this.options), options || {});
@@ -55,14 +62,14 @@ g2svg.prototype.convertFeature = function(feature,options) {
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
     var opt = extend(extend({},this.options), options || {});
-    var output = opt.output || 'svg';
+    //var explode = opt.hasOwnProperty('explode') ? opt.explode : false;
     var paths = converter[geom.type].call(this,geom,
       this.res,
       {x:this.mapExtent.left,y:this.mapExtent.top},
       opt
     );
     var svgJsons,svgEles;
-    if (output.toLowerCase() == 'svg') {
+    if(opt.output && opt.output.toLowerCase() == 'svg') {
       svgJsons = paths.map(function(path) {
         return pathToSvgJson(path,geom.type,opt.attributes,opt);
       });
@@ -70,9 +77,8 @@ g2svg.prototype.convertGeometry = function(geom,options) {
         return jsonToSvgElement(json,geom.type);
       });
       return svgEles;
-    } else {
-      return paths;
     }
+    return paths;
   } else {
     return;
   }
