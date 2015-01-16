@@ -11,6 +11,12 @@ For including in html page standard way, download file dist/geojson2svg.min.js
 <script type="text/javascipt" src="path/to/geojson2svg.min.js"></script>
 ```
 This creates a global variable 'geojson2svg'
+
+geojson2svg is also available on [cdnjs](https://cdnjs.com/libraries/geojson2svg) and can be included like:
+```html
+<script type="text/javascipt" src="//cdnjs.cloudflare.com/ajax/libs/geojson2svg/x.x.x/geojson2svg.min.js"></script>
+```
+
 ## Usage
 Using in node.js or with browserify
 ```javascript
