@@ -49,6 +49,8 @@ var svgString = converter.convert(geojson,options);
 
     'path' - path 'd' value is returned 'M0,0 20,10 106,40' a linestring
 
+* **fitTo** 'width' | 'height' Fit ouput svg map to width or heihgt.
+
 * **explode:** true | false, default is false. Should multigeojson be exploded to many svg elements or not. 
 * **attributes:** json object containing attribute(key) and values(value) for all svg elements. These attributes would be added to svg string. If option is like
 
