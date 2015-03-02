@@ -15,7 +15,6 @@ describe('geojson2svg', function() {
 	    var converter = geojson2svg(testData.svgSize,testData.options);
 	    testData.geojsons.forEach(function(data) {
 	      it(data.type+ ' {output: "path",explode: false,r:2}',function() {
-        debugger;
         var options = {output:'path'};
         options = extend(options,testData.options);
 	        var actualPaths = converter.convert(data.geojson,options);
@@ -76,6 +75,24 @@ describe('geojson2svg', function() {
         testPath([actualPaths[i]],[expPaths[i]],
           testData.featureCollection.geojson.features[i].geometry.type,precision);
       }
+    });
+    it('Polygon fit to width', function() { 
+      var converter2 = geojson2svg(
+        {width: 300, height: 100},
+        { 
+          mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
+          fitTo: 'width',
+          output: 'svg',
+          explode: false
+        }
+      );
+      var actualData = converter2.convert(
+        testData['Polygon fit to width'].geojson);
+      testSVG(
+        actualData,
+        testData['Polygon fit to width'].svg,
+        testData['Polygon fit to width'].geojson.type,
+        precision);
     });
   });
 });

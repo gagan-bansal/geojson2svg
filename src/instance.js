@@ -13,12 +13,23 @@ var g2svg = function(viewportSize,options) {
       bottom: -20037508.342789244,
       top: 20037508.342789244
     };
-  this.res = this.calResolution(this.mapExtent,this.viewportSize);
+  this.res = this.calResolution(this.mapExtent,this.viewportSize,
+    this.options.fitTo);
 };
-g2svg.prototype.calResolution = function(extent,size) {
+g2svg.prototype.calResolution = function(extent,size,fitTo) {
   var xres = (extent.right - extent.left)/size.width;
   var yres = (extent.top - extent.bottom)/size.height;
-  return Math.max(xres,yres);
+  if (fitTo) { 
+    if (fitTo.toLowerCase() === 'width') {
+      return xres;
+    } else if (fitTo.toLowerCase() === 'height') {
+      return yres;
+    } else {
+      throw new Error('"fitTo" option should be "width" or "height" ');
+    }
+  } else {
+    return Math.max(xres,yres);
+  }
 };
 g2svg.prototype.convert = function(geojson,options)  {
   var opt = extend(extend({},this.options), options || {});
