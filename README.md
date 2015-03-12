@@ -123,7 +123,7 @@ var pathData = converter.convert(
 ## Developing
 Once you run
  
-```npm isntall```
+```npm install```
 
 then for running test 
 
