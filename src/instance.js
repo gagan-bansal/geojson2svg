@@ -2,10 +2,10 @@ var extend = require('xtend'),
 	converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
-var g2svg = function(viewportSize,options) {
-  if(!viewportSize) return;
-  this.viewportSize = viewportSize;
+var g2svg = function(options) {
   this.options = options || {};
+  this.viewportSize = this.options.viewportSize || 
+    {width: 256, height: 256};
   this.mapExtent = this.options.mapExtent ||
     {
       left: -20037508.342789244,
