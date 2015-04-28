@@ -12,7 +12,7 @@ describe('geojson2svg', function() {
   var precision = testData.precision;
 	  describe(testData.desc+ ': .convert()', function() {
 	    var geojson2svg = require('../src/main.js');
-	    var converter = geojson2svg(testData.svgSize,testData.options);
+	    var converter = geojson2svg(testData.options);
 	    testData.geojsons.forEach(function(data) {
 	      it(data.type+ ' {output: "path",explode: false,r:2}',function() {
         var options = {output:'path'};
@@ -78,8 +78,8 @@ describe('geojson2svg', function() {
     });
     it('Polygon fit to width', function() { 
       var converter2 = geojson2svg(
-        {width: 300, height: 100},
         { 
+          viewportSize: {width: 300, height: 100},
           mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
           fitTo: 'width',
           output: 'svg',
@@ -93,6 +93,13 @@ describe('geojson2svg', function() {
         testData['Polygon fit to width'].svg,
         testData['Polygon fit to width'].geojson.type,
         precision);
+    });
+    it('Default vieport size and default maps extent.', function() {
+      debugger;
+      var converter = geojson2svg();
+      var actualOutput = converter.convert(testData['Default values'].geojson);
+      testSVG(actualOutput, testData['Default values'].svg, 
+        testData['Default values'].geojson.type, precision);
     });
   });
 });

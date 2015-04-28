@@ -21,35 +21,40 @@ geojson2svg is also available on [cdnjs](https://cdnjs.com/libraries/geojson2svg
 Using in node.js or with browserify
 ```javascript
 var geojson2svg = require('geojson2svg');
-var converter = geojson2svg(viewportSize,options);
+var converter = geojson2svg(options);
 var svgString = converter.convert(geojson,options);
 ```
 Using in browser standard way
 ```
-var converter = geojson2svg(viewportSize,options);
+var converter = geojson2svg(options);
 var svgString = converter.convert(geojson,options);
 ```
-**viewportSize** is object containing width and height in pixels - {width: 200, height: 100}
-
 **convert** function returns array of svg element string
 ### Options
 
+* **viewportSize** is object containing width and height in pixels. Default viewportSize values are:
+```
+  {
+    width: 256,
+    height: 256
+  }
+```
 * **mapExtent:** {"left": coordinate, "bottom": coordinate, "right": coordinate, "top": coordinate}. Coordinates should be in same projection as of geojson. Default maps extent are of Web Mercator projection (EPSG:3857). Default extent values are:
 ```
-    {
-      left: -20037508.342789244,
-      right: 20037508.342789244,
-      bottom: -20037508.342789244,
-      top: 20037508.342789244
-    }
+  {
+    left: -20037508.342789244,
+    right: 20037508.342789244,
+    bottom: -20037508.342789244,
+    top: 20037508.342789244
+  }
 ```
 * **output:** 'svg'|'path' default is 'svg'
 
     'svg' - svg element string is returned like ```'<path d="M0,0 20,10 106,40"/>'```
 
-    'path' - path 'd' value is returned 'M0,0 20,10 106,40' a linestring
+    'path' - path 'd' value is returned ```'M0,0 20,10 106,40'``` a linestring
 
-* **fitTo** 'width' | 'height' Fit ouput svg map to width or heihgt.
+* **fitTo** 'width' | 'height' Fit ouput svg map to width or height.
 
 * **explode:** true | false, default is false. Should multigeojson be exploded to many svg elements or not. 
 * **attributes:** json object containing attribute(key) and values(value) for all svg elements. These attributes would be added to svg string. If option is like
@@ -73,7 +78,7 @@ var svgString = converter.convert(geojson,options);
    }}
    ```
 
-   Suitable callback function could be render svgString.
+   Callback function could be used to render SVG string.
   
 The options **'attributes'**, **'r'** and **'callback'** can also be given in **convert** function 
 ``` 
@@ -86,13 +91,14 @@ var svgString = convertor.convert(geojson,
 ```
 
 
-**mapExtent** is critical option default are the extents of Web Mercator projection ('EPSG:3857') or also known as Spherical Mercator. This projection is used by many web mapping sites (Google / Bing / OpenStreetMap). In case your source data is in geographic coordinates, it can be converted on the fly to Web Mercator Projection using [reproject](https://github.com/perliedman/reproject) or [proj4js](https://github.com/proj4js/proj4js). Check my [world map](https://github.com/gagan-bansal/geojson2svg/blob/master/examples/world.html) example for detail.
+**mapExtent** is critical option default are the extents of Web Mercator projection ('EPSG:3857') or also known as Spherical Mercator. This projection is used by many web mapping sites (Google / Bing / OpenStreetMap). In case your source data is in geographic coordinates, it can be converted on the fly to Web Mercator Projection using [reproject-spherical-mercator](https://github.com/geosquare/reproject-spherical-mercator) or [reproject](https://github.com/perliedman/reproject) or [proj4js](https://github.com/proj4js/proj4js). Check my [world map](https://github.com/gagan-bansal/geojson2svg/blob/master/examples/world.html) example for detail.
 
 ### Examples
 Converts geojson LineString to svg element string:
 ```
-var converter = geojson2svg({width: 200, height: 100},
+var converter = geojson2svg(
   {
+    viewportSize: {width: 200, height: 100},
     mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
     output: 'svg' 
   }
@@ -104,8 +110,9 @@ var svgString = converter.convert(
 ```
 Converts geojson Polygon to svg path data 'd' string:
 ```
-var converter = geojson2svg({width: 200, height: 100},
-  {    
+var converter = geojson2svg(
+  {
+    viewportExtent: {width: 200, height: 100}, 
     mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
     output: 'path'
   }
@@ -119,7 +126,9 @@ var pathData = converter.convert(
   }
 );
 // pathData: ['M116.66666666666666,44.44444444444444 122.22222222222221,27.77777777777778 111.11111111111111,27.77777777777778 105.55555555555556,38.888888888888886 116.66666666666666,44.44444444444444Z']
-``` 
+```
+
+Check my blog [maps-on-blackboard](http://maps-on-blackboard.com/) for more detailed examples.
 ## Developing
 Once you run
  

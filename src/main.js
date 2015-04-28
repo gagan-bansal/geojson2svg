@@ -1,7 +1,6 @@
 var g2svg = require('./instance.js');
-var geojson2svg = function(viewportSize,options) {
-  if(!viewportSize) return;
-  return new g2svg(viewportSize,options);
+var geojson2svg = function(options) {
+  return new g2svg(options);
 };
 
 module.exports = geojson2svg;

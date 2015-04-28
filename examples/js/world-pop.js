@@ -28,7 +28,7 @@ function drawGeoJSON(resp) {
     geojson,'EPSG:4326','EPSG:3857',proj4.defs);
   //render on svg
   var svgMap = document.getElementById('map');
-  var convertor = geojson2svg({width:800,height:800});
+  var convertor = geojson2svg({ viewportSize: {width:800,height:800}});
   // render feature based on population
   var svgElements = [];
   geojson.features
