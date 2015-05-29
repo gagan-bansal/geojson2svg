@@ -1,4 +1,4 @@
-var extend = require('xtend'),
+var merge = require('deepmerge'),
 	converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
@@ -32,7 +32,7 @@ g2svg.prototype.calResolution = function(extent,size,fitTo) {
   }
 };
 g2svg.prototype.convert = function(geojson,options)  {
-  var opt = extend(extend({},this.options), options || {});
+  var opt = merge(merge({},this.options), options || {});
   var multiGeometries = ['MultiPoint','MultiLineString','MultiPolygon'];
   var geometries = ['Point', 'LineString', 'Polygon'];
   var svgElements = [];
@@ -58,14 +58,14 @@ g2svg.prototype.convert = function(geojson,options)  {
 };
 g2svg.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
-  var opt = extend(extend({},this.options), options || {});
+  var opt = merge(merge({},this.options), options || {});
   opt.attributes = opt.attributes || {};
   opt.attributes.id = opt.attributes.id || feature.id || null;
   return this.convertGeometry(feature.geometry,opt);
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
-    var opt = extend(extend({},this.options), options || {});
+    var opt = merge(merge({},this.options), options || {});
     var output = opt.output || 'svg';
     var paths = converter[geom.type].call(this,geom,
       this.res,

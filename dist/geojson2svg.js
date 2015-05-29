@@ -1,4 +1,58 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var o;"undefined"!=typeof window?o=window:"undefined"!=typeof global?o=global:"undefined"!=typeof self&&(o=self),o.geojson2svg=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else if (typeof exports === 'object') {
+        module.exports = factory();
+    } else {
+        root.deepmerge = factory();
+    }
+}(this, function () {
+
+return function deepmerge(target, src) {
+    var array = Array.isArray(src);
+    var dst = array && [] || {};
+
+    if (array) {
+        target = target || [];
+        dst = dst.concat(target);
+        src.forEach(function(e, i) {
+            if (typeof dst[i] === 'undefined') {
+                dst[i] = e;
+            } else if (typeof e === 'object') {
+                dst[i] = deepmerge(target[i], e);
+            } else {
+                if (target.indexOf(e) === -1) {
+                    dst.push(e);
+                }
+            }
+        });
+    } else {
+        if (target && typeof target === 'object') {
+            Object.keys(target).forEach(function (key) {
+                dst[key] = target[key];
+            })
+        }
+        Object.keys(src).forEach(function (key) {
+            if (typeof src[key] !== 'object' || !src[key]) {
+                dst[key] = src[key];
+            }
+            else {
+                if (!target[key]) {
+                    dst[key] = src[key];
+                } else {
+                    dst[key] = deepmerge(target[key], src[key]);
+                }
+            }
+        });
+    }
+
+    return dst;
+}
+
+}));
+
+},{}],2:[function(require,module,exports){
 //index.js 
 (function() { 
 	var singles = ['Point', 'LineString', 'Polygon'];
@@ -48,25 +102,6 @@
 	  window.multigeojson = multigeojson;
 	}
 })();
-
-},{}],2:[function(require,module,exports){
-module.exports = extend
-
-function extend() {
-    var target = {}
-
-    for (var i = 0; i < arguments.length; i++) {
-        var source = arguments[i]
-
-        for (var key in source) {
-            if (source.hasOwnProperty(key)) {
-                target[key] = source[key]
-            }
-        }
-    }
-
-    return target
-}
 
 },{}],3:[function(require,module,exports){
 //converter.js
@@ -149,8 +184,8 @@ module.exports = {
   MultiPolygon: multiPolygon
 };
 
-},{"multigeojson":1}],4:[function(require,module,exports){
-var extend = require('xtend'),
+},{"multigeojson":2}],4:[function(require,module,exports){
+var merge = require('deepmerge'),
 	converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
@@ -184,7 +219,7 @@ g2svg.prototype.calResolution = function(extent,size,fitTo) {
   }
 };
 g2svg.prototype.convert = function(geojson,options)  {
-  var opt = extend(extend({},this.options), options || {});
+  var opt = merge(merge({},this.options), options || {});
   var multiGeometries = ['MultiPoint','MultiLineString','MultiPolygon'];
   var geometries = ['Point', 'LineString', 'Polygon'];
   var svgElements = [];
@@ -210,14 +245,14 @@ g2svg.prototype.convert = function(geojson,options)  {
 };
 g2svg.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
-  var opt = extend(extend({},this.options), options || {});
+  var opt = merge(merge({},this.options), options || {});
   opt.attributes = opt.attributes || {};
   opt.attributes.id = opt.attributes.id || feature.id || null;
   return this.convertGeometry(feature.geometry,opt);
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
-    var opt = extend(extend({},this.options), options || {});
+    var opt = merge(merge({},this.options), options || {});
     var output = opt.output || 'svg';
     var paths = converter[geom.type].call(this,geom,
       this.res,
@@ -275,7 +310,7 @@ var jsonToSvgElement = function(json,type,opt) {
 
 module.exports = g2svg;
 
-},{"./converter.js":3,"xtend":2}],5:[function(require,module,exports){
+},{"./converter.js":3,"deepmerge":1}],5:[function(require,module,exports){
 var g2svg = require('./instance.js');
 var geojson2svg = function(options) {
   return new g2svg(options);

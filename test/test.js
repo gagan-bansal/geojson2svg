@@ -1,6 +1,6 @@
 'use strict';
 var testDataSets = [];
-var extend = require('xtend');
+var merge = require('deepmerge');
 var basics = ['Point', 'LineString', 'Polygon', 'MultiPoint', 'MultiLineString',
  'MultiPolygon'];
 var testData = require('./testdata.js');
@@ -16,7 +16,7 @@ describe('geojson2svg', function() {
 	    testData.geojsons.forEach(function(data) {
 	      it(data.type+ ' {output: "path",explode: false,r:2}',function() {
         var options = {output:'path'};
-        options = extend(options,testData.options);
+        options = merge(options,testData.options);
 	        var actualPaths = converter.convert(data.geojson,options);
         testPath(actualPaths,data.path,data.geojson.type,precision);
 	      });
