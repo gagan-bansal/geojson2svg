@@ -22,8 +22,8 @@
   "auther": "Gagan Bansal",
   "license": "MIT",
   "dependencies": {
-    "multigeojson": "~0.0.1",
-    "xtend": "~4.0.0"
+    "deepmerge": "^0.2.10",
+    "multigeojson": "~0.0.1"
   },
   "devDependencies": {
     "browserify": "~5.10.1",
