@@ -60,7 +60,8 @@ g2svg.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
   var opt = merge(merge({},this.options), options || {});
   opt.attributes = opt.attributes || {};
-  opt.attributes.id = opt.attributes.id || feature.id || null;
+  opt.attributes.id = opt.attributes.id || feature.id || 
+    (feature.properties && feature.properties.id ? feature.properties.id : null);
   return this.convertGeometry(feature.geometry,opt);
 };
 g2svg.prototype.convertGeometry = function(geom,options) {

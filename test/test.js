@@ -10,21 +10,21 @@ var expect = require('chai').expect
 
 describe('geojson2svg', function() {
   var precision = testData.precision;
-	  describe(testData.desc+ ': .convert()', function() {
-	    var geojson2svg = require('../src/main.js');
-	    var converter = geojson2svg(testData.options);
-	    testData.geojsons.forEach(function(data) {
-	      it(data.type+ ' {output: "path",explode: false,r:2}',function() {
+    describe(testData.desc+ ': .convert()', function() {
+      var geojson2svg = require('../src/main.js');
+      var converter = geojson2svg(testData.options);
+      testData.geojsons.forEach(function(data) {
+        it(data.type+ ' {output: "path",explode: false,r:2}',function() {
         var options = {output:'path'};
         options = merge(options,testData.options);
-	        var actualPaths = converter.convert(data.geojson,options);
+          var actualPaths = converter.convert(data.geojson,options);
         testPath(actualPaths,data.path,data.geojson.type,precision);
-	      });
-      it(data.type + ' {output: "svg",explode: false,r:2}',function() {
-        var actualSVGs = converter.convert(data.geojson,testData.options);
-        testSVG(actualSVGs,data.svg,data.geojson.type,precision);
+        });
+        it(data.type + ' {output: "svg",explode: false,r:2}',function() {
+          var actualSVGs = converter.convert(data.geojson,testData.options);
+          testSVG(actualSVGs,data.svg,data.geojson.type,precision);
+        });
       });
-	    });
     it('Feature {output: "path",explode: false}', function() {
       var actualPaths = converter.convert(testData.feature.geojson,
         {output:'path',explode:false});
@@ -100,6 +100,49 @@ describe('geojson2svg', function() {
       var actualOutput = converter.convert(testData['Default values'].geojson);
       testSVG(actualOutput, testData['Default values'].svg, 
         testData['Default values'].geojson.type, precision);
+    });
+    it('add properties to svg: pass properties in constructor', function() {
+      var converter = geojson2svg({attributes: {class: 'foo'}});
+      var output = converter.convert(
+        {type:'LineString', coordinates: [[0,0], [1000,1000]]});
+      var outputEle = jsdom(output).firstChild.children[1].children[0];
+      expect(outputEle).to.respondTo('getAttribute');
+      expect(outputEle.getAttribute('class')).to.be.equal('foo');
+    });
+    it('add properties to svg: pass properties in .convert', function() {
+      var converter = geojson2svg({attributes: {class: 'foo',id: 'foo-1'}});
+      var output = converter.convert(
+        {type:'LineString', coordinates: [[0,0], [1000,1000]]},
+        {attributes: {class: 'foo',id: 'foo-1'}}
+      );
+      var outputEle = jsdom(output).firstChild.children[1].children[0];
+      expect(outputEle).to.respondTo('getAttribute');
+      expect(outputEle.getAttribute('class')).to.be.equal('foo');
+      expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
+    });
+    it('add id to svg: as feature.id', function() {
+      var converter = geojson2svg({attributes: {class: 'foo'}});
+      var output = converter.convert({
+        type: 'Feature',
+        id: 'foo-1',
+        geometry: {type:'LineString', coordinates: [[0,0], [1000,1000]]}
+      });
+      var outputEle = jsdom(output).firstChild.children[1].children[0];
+      expect(outputEle).to.respondTo('getAttribute');
+      expect(outputEle.getAttribute('class')).to.be.equal('foo');
+      expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
+    });
+    it('add id to svg: as feature.properties.id', function() {
+      var converter = geojson2svg({attributes: {class: 'foo'}});
+      var output = converter.convert({
+        type: 'Feature',
+        geometry: {type:'LineString', coordinates: [[0,0], [1000,1000]]},
+        properties: {id: 'foo-1', name: 'bar'}
+      });
+      var outputEle = jsdom(output).firstChild.children[1].children[0];
+      expect(outputEle).to.respondTo('getAttribute');
+      expect(outputEle.getAttribute('class')).to.be.equal('foo');
+      expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
     });
   });
 });

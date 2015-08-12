@@ -93,6 +93,10 @@ var svgString = convertor.convert(geojson,
 
 **mapExtent** is critical option default are the extents of Web Mercator projection ('EPSG:3857') or also known as Spherical Mercator. This projection is used by many web mapping sites (Google / Bing / OpenStreetMap). In case your source data is in geographic coordinates, it can be converted on the fly to Web Mercator Projection using [reproject-spherical-mercator](https://github.com/geosquare/reproject-spherical-mercator) or [reproject](https://github.com/perliedman/reproject) or [proj4js](https://github.com/proj4js/proj4js). Check my [world map](https://github.com/gagan-bansal/geojson2svg/blob/master/examples/world.html) example for detail.
 
+**Assigning id to SVG path**
+
+There are three ways for doing this. First and second, `.converter` reads it from `feature.properties.id` or `feature.id`. Third way, pass id along with attributes like `converter.convert(feature, {attributes: {id:'foo-1', class: 'bar'}})`. Preference order is first as id key in attributes then feature.id and last feature.properties.id.
+
 ### Examples
 Converts geojson LineString to svg element string:
 ```
@@ -128,7 +132,7 @@ var pathData = converter.convert(
 // pathData: ['M116.66666666666666,44.44444444444444 122.22222222222221,27.77777777777778 111.11111111111111,27.77777777777778 105.55555555555556,38.888888888888886 116.66666666666666,44.44444444444444Z']
 ```
 
-Check my blog [maps-on-blackboard](http://maps-on-blackboard.com/) for more detailed examples.
+Check my blog [maps-on-blackboard](http://maps-on-blackboard.com/tag/geojson2svg/) for more detailed examples.
 ## Developing
 Once you run
  
