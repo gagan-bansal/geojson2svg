@@ -230,7 +230,7 @@ g2svg.prototype.convert = function(geojson,options)  {
     }
   } else if (geojson.type == 'Feature') {
     svgElements = this.convertFeature(geojson,opt);
-  } else if (geojson.type == 'GeomtryCollection') {
+  } else if (geojson.type == 'GeometryCollection') {
     for(var i=0; i< geojson.geometries.length; i++) {
       svgElements = svgElements.concat(
         this.convertGeometry(geojson.geometries[i],opt));
