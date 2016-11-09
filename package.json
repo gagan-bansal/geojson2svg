@@ -22,7 +22,7 @@
   "auther": "Gagan Bansal",
   "license": "MIT",
   "dependencies": {
-    "deepmerge": "^0.2.10",
+    "deepmerge": "^1.2.0",
     "multigeojson": "~0.0.1"
   },
   "devDependencies": {

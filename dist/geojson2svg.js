@@ -9,46 +9,67 @@
     }
 }(this, function () {
 
-return function deepmerge(target, src) {
-    var array = Array.isArray(src);
-    var dst = array && [] || {};
+function isMergeableObject(val) {
+    var nonNullObject = val && typeof val === 'object'
+
+    return nonNullObject
+        && Object.prototype.toString.call(val) !== '[object RegExp]'
+        && Object.prototype.toString.call(val) !== '[object Date]'
+}
+
+function emptyTarget(val) {
+    return Array.isArray(val) ? [] : {}
+}
+
+function cloneIfNecessary(value, optionsArgument) {
+    var clone = optionsArgument && optionsArgument.clone === true
+    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+    var destination = target.slice()
+    source.forEach(function(e, i) {
+        if (typeof destination[i] === 'undefined') {
+            destination[i] = cloneIfNecessary(e, optionsArgument)
+        } else if (isMergeableObject(e)) {
+            destination[i] = deepmerge(target[i], e, optionsArgument)
+        } else if (target.indexOf(e) === -1) {
+            destination.push(cloneIfNecessary(e, optionsArgument))
+        }
+    })
+    return destination
+}
+
+function mergeObject(target, source, optionsArgument) {
+    var destination = {}
+    if (isMergeableObject(target)) {
+        Object.keys(target).forEach(function (key) {
+            destination[key] = cloneIfNecessary(target[key], optionsArgument)
+        })
+    }
+    Object.keys(source).forEach(function (key) {
+        if (!isMergeableObject(source[key]) || !target[key]) {
+            destination[key] = cloneIfNecessary(source[key], optionsArgument)
+        } else {
+            destination[key] = deepmerge(target[key], source[key], optionsArgument)
+        }
+    })
+    return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+    var array = Array.isArray(source);
+    var options = optionsArgument || { arrayMerge: defaultArrayMerge }
+    var arrayMerge = options.arrayMerge || defaultArrayMerge
 
     if (array) {
-        target = target || [];
-        dst = dst.concat(target);
-        src.forEach(function(e, i) {
-            if (typeof dst[i] === 'undefined') {
-                dst[i] = e;
-            } else if (typeof e === 'object') {
-                dst[i] = deepmerge(target[i], e);
-            } else {
-                if (target.indexOf(e) === -1) {
-                    dst.push(e);
-                }
-            }
-        });
+        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
     } else {
-        if (target && typeof target === 'object') {
-            Object.keys(target).forEach(function (key) {
-                dst[key] = target[key];
-            })
-        }
-        Object.keys(src).forEach(function (key) {
-            if (typeof src[key] !== 'object' || !src[key]) {
-                dst[key] = src[key];
-            }
-            else {
-                if (!target[key]) {
-                    dst[key] = src[key];
-                } else {
-                    dst[key] = deepmerge(target[key], src[key]);
-                }
-            }
-        });
+        return mergeObject(target, source, optionsArgument)
     }
-
-    return dst;
 }
+
+return deepmerge
 
 }));
 
@@ -219,7 +240,7 @@ g2svg.prototype.calResolution = function(extent,size,fitTo) {
   }
 };
 g2svg.prototype.convert = function(geojson,options)  {
-  var opt = merge(merge({},this.options), options || {});
+  var opt = merge(this.options, options || {}, {clone: true});
   var multiGeometries = ['MultiPoint','MultiLineString','MultiPolygon'];
   var geometries = ['Point', 'LineString', 'Polygon'];
   var svgElements = [];
@@ -245,7 +266,7 @@ g2svg.prototype.convert = function(geojson,options)  {
 };
 g2svg.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
-  var opt = merge(merge({},this.options), options || {});
+  var opt = merge(this.options, options || {}, {clone: true});
   opt.attributes = opt.attributes || {};
   opt.attributes.id = opt.attributes.id || feature.id || 
     (feature.properties && feature.properties.id ? feature.properties.id : null);
@@ -253,7 +274,7 @@ g2svg.prototype.convertFeature = function(feature,options) {
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
-    var opt = merge(merge({},this.options), options || {});
+    var opt = merge(this.options, options || {}, {clone: true});
     var output = opt.output || 'svg';
     var paths = converter[geom.type].call(this,geom,
       this.res,

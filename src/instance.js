@@ -32,7 +32,7 @@ g2svg.prototype.calResolution = function(extent,size,fitTo) {
   }
 };
 g2svg.prototype.convert = function(geojson,options)  {
-  var opt = merge(merge({},this.options), options || {});
+  var opt = merge(this.options, options || {}, {clone: true});
   var multiGeometries = ['MultiPoint','MultiLineString','MultiPolygon'];
   var geometries = ['Point', 'LineString', 'Polygon'];
   var svgElements = [];
@@ -58,7 +58,7 @@ g2svg.prototype.convert = function(geojson,options)  {
 };
 g2svg.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
-  var opt = merge(merge({},this.options), options || {});
+  var opt = merge(this.options, options || {}, {clone: true});
   opt.attributes = opt.attributes || {};
   opt.attributes.id = opt.attributes.id || feature.id || 
     (feature.properties && feature.properties.id ? feature.properties.id : null);
@@ -66,7 +66,7 @@ g2svg.prototype.convertFeature = function(feature,options) {
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
-    var opt = merge(merge({},this.options), options || {});
+    var opt = merge(this.options, options || {}, {clone: true});
     var output = opt.output || 'svg';
     var paths = converter[geom.type].call(this,geom,
       this.res,
