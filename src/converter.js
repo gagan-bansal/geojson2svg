@@ -19,10 +19,18 @@ function addAttributes(ele,attributes) {
 
 function point(geom,res,origin,opt) {
   var r = opt && opt.r ? opt.r : 1;
-  var path = 'M' + getCoordString([geom.coordinates],res,origin)
-    +' m'+ -r+ ',0'+ ' a'+r+','+ r + ' 0 1,1 '+ 2*r + ','+0
-    +' a'+r+','+ r + ' 0 1,1 '+ -2*r + ','+0;
-  return [path];
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+    ? opt.pointAsCircle : false;
+  var coords = getCoordString([geom.coordinates],res,origin);
+  if (pointAsCircle) {
+    return [coords];
+  } else {
+    return [
+      'M' + coords 
+      + ' m'+ -r+ ',0'+ ' a'+r+','+ r + ' 0 1,1 '+ 2*r + ','+0
+      + ' a'+r+','+ r + ' 0 1,1 '+ -2*r + ','+0
+    ];
+  }
 }
 function multiPoint(geom,res,origin,opt) {
   var explode = opt && opt.hasOwnProperty('explode') ? opt.explode : false;

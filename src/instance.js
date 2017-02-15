@@ -79,7 +79,7 @@ g2svg.prototype.convertGeometry = function(geom,options) {
         return pathToSvgJson(path,geom.type,opt.attributes,opt);
       });
       svgEles = svgJsons.map(function(json) {
-        return jsonToSvgElement(json,geom.type);
+        return jsonToSvgElement(json,geom.type,opt);
       });
       return svgEles;
     } else {
@@ -91,9 +91,9 @@ g2svg.prototype.convertGeometry = function(geom,options) {
 };
 var pathToSvgJson = function(path,type,attributes,opt) {
   var svg = {};
-  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
-     : true;
-  if((type == 'Point' || type == 'MultiPoint') && !forcePath) {
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+    ? opt.pointAsCircle : false;
+  if((type == 'Point' || type == 'MultiPoint') && pointAsCircle) {
     svg['cx'] = path.split(',')[0];
     svg['cy'] = path.split(',')[1];
     svg['r'] = opt && opt.r ? opt.r : '1';
@@ -109,10 +109,10 @@ var pathToSvgJson = function(path,type,attributes,opt) {
   return svg;
 };
 var jsonToSvgElement = function(json,type,opt) {
-  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
-     : true;
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+    ? opt.pointAsCircle : false;
   var ele ='<path';
-  if((type == 'Point' || type == 'MultiPoint') && !forcePath) {
+  if((type == 'Point' || type == 'MultiPoint') && pointAsCircle) {
     ele = '<circle';
   }
   for(var key in json) {

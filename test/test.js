@@ -25,6 +25,26 @@ describe('geojson2svg', function() {
           testSVG(actualSVGs,data.svg,data.geojson.type,precision);
         });
       });
+    it('Point while output svg as Circle', function() {
+      var expSVGs = [ '<circle cx="128.00031940098992" cy="127.99968059901009" r="2"/>' ]
+      var converter = geojson2svg(testData.options);
+      var actualSVGs = converter.convert(
+        {type:'Point',coordinates:[50,50]},
+        {pointAsCircle: true});
+      expect(actualSVGs).to.be.an('array');
+      expect(actualSVGs.length).to.be.equal(1);
+      var actSVGEle = jsdom(actualSVGs).firstChild.children[1].children[0];
+        expect(actSVGEle.nodeName).to.be.equal('CIRCLE');
+        expect(actSVGEle.hasAttribute('cx'))
+        expect(parseFloat(actSVGEle.getAttribute('cx')))
+          .to.be.closeTo(127.77777777777777, precision);
+        expect(actSVGEle.hasAttribute('cy'))
+        expect(parseFloat(actSVGEle.getAttribute('cy')))
+          .to.be.closeTo(22.22222222222222, precision);
+        expect(actSVGEle.hasAttribute('r'))
+        expect(actSVGEle.getAttribute('r'))
+          .to.be.equal('2');
+    });
     it('Feature {output: "path",explode: false}', function() {
       var actualPaths = converter.convert(testData.feature.geojson,
         {output:'path',explode:false});
@@ -95,7 +115,6 @@ describe('geojson2svg', function() {
         precision);
     });
     it('Default vieport size and default maps extent.', function() {
-      debugger;
       var converter = geojson2svg();
       var actualOutput = converter.convert(testData['Default values'].geojson);
       testSVG(actualOutput, testData['Default values'].svg, 
@@ -151,7 +170,7 @@ function testSVG(actualSVGs,expSVGs,type,precision) {
   expect(actualSVGs).to.be.an('array');
   expect(actualSVGs.length).to.be.equal(expSVGs.length);
   var expSVGEle,actSVGEle,expPaths,actPaths;
-  for(var i=0;i<expSVGs.length; i++) {
+  //for(var i=0;i<expSVGs.length; i++) {
     expSVGEle = jsdom(expSVGs).firstChild.children[1].children[0];
     actSVGEle = jsdom(actualSVGs).firstChild.children[1].children[0];
     expect(actSVGEle.nodeName).to.be.equal('PATH');
@@ -159,7 +178,7 @@ function testSVG(actualSVGs,expSVGs,type,precision) {
     expPaths = expSVGEle.getAttribute('d');
     actPaths = actSVGEle.getAttribute('d');
     testPath([actPaths],[expPaths],type,precision);
-  }
+  //}
 }
 
 function testPath(actualPaths,expPaths,type,precision) {
