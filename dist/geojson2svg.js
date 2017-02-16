@@ -69,6 +69,17 @@ function deepmerge(target, source, optionsArgument) {
     }
 }
 
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+    if (!Array.isArray(array) || array.length < 2) {
+        throw new Error('first argument should be an array with at least two elements')
+    }
+
+    // we are sure there are at least 2 values, so it is safe to have no initial value
+    return array.reduce(function(prev, next) {
+        return deepmerge(prev, next, optionsArgument)
+    })
+}
+
 return deepmerge
 
 }));
@@ -146,10 +157,18 @@ function addAttributes(ele,attributes) {
 
 function point(geom,res,origin,opt) {
   var r = opt && opt.r ? opt.r : 1;
-  var path = 'M' + getCoordString([geom.coordinates],res,origin)
-    +' m'+ -r+ ',0'+ ' a'+r+','+ r + ' 0 1,1 '+ 2*r + ','+0
-    +' a'+r+','+ r + ' 0 1,1 '+ -2*r + ','+0;
-  return [path];
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+    ? opt.pointAsCircle : false;
+  var coords = getCoordString([geom.coordinates],res,origin);
+  if (pointAsCircle) {
+    return [coords];
+  } else {
+    return [
+      'M' + coords 
+      + ' m'+ -r+ ',0'+ ' a'+r+','+ r + ' 0 1,1 '+ 2*r + ','+0
+      + ' a'+r+','+ r + ' 0 1,1 '+ -2*r + ','+0
+    ];
+  }
 }
 function multiPoint(geom,res,origin,opt) {
   var explode = opt && opt.hasOwnProperty('explode') ? opt.explode : false;
@@ -287,7 +306,7 @@ g2svg.prototype.convertGeometry = function(geom,options) {
         return pathToSvgJson(path,geom.type,opt.attributes,opt);
       });
       svgEles = svgJsons.map(function(json) {
-        return jsonToSvgElement(json,geom.type);
+        return jsonToSvgElement(json,geom.type,opt);
       });
       return svgEles;
     } else {
@@ -299,9 +318,9 @@ g2svg.prototype.convertGeometry = function(geom,options) {
 };
 var pathToSvgJson = function(path,type,attributes,opt) {
   var svg = {};
-  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
-     : true;
-  if((type == 'Point' || type == 'MultiPoint') && !forcePath) {
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+    ? opt.pointAsCircle : false;
+  if((type == 'Point' || type == 'MultiPoint') && pointAsCircle) {
     svg['cx'] = path.split(',')[0];
     svg['cy'] = path.split(',')[1];
     svg['r'] = opt && opt.r ? opt.r : '1';
@@ -317,10 +336,10 @@ var pathToSvgJson = function(path,type,attributes,opt) {
   return svg;
 };
 var jsonToSvgElement = function(json,type,opt) {
-  var forcePath = opt && opt.hasOwnProperty('forcePath') ? opt.forcePath
-     : true;
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+    ? opt.pointAsCircle : false;
   var ele ='<path';
-  if((type == 'Point' || type == 'MultiPoint') && !forcePath) {
+  if((type == 'Point' || type == 'MultiPoint') && pointAsCircle) {
     ele = '<circle';
   }
   for(var key in json) {
