@@ -163,6 +163,26 @@ describe('geojson2svg', function() {
       expect(outputEle.getAttribute('class')).to.be.equal('foo');
       expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
     });
+    it('add custom data properties to svg', function() {
+      var converter = geojson2svg();
+      var output = converter.convert({
+        type: 'Feature',
+        geometry: {type:'LineString', coordinates: [[0,0], [1000,1000]]},
+        properties: {
+          id: 'foo-1',
+          name: 'bar',
+          data: {
+            'ns:field1': 'data1',
+            'ns:field2': 'data2',
+          },
+        }
+      });
+      var outputEle = jsdom(output).firstChild.children[1].children[0];
+      expect(outputEle).to.respondTo('getAttribute');
+      expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
+      expect(outputEle.getAttribute('ns:field1')).to.be.equal('data1');
+      expect(outputEle.getAttribute('ns:field2')).to.be.equal('data2');
+    });
   });
 });
 

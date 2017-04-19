@@ -97,6 +97,10 @@ var svgString = convertor.convert(geojson,
 
 There are three ways for doing this. First and second, `.converter` reads it from `feature.properties.id` or `feature.id`. Third way, pass id along with attributes like `converter.convert(feature, {attributes: {id:'foo-1', class: 'bar'}})`. Preference order is first as id key in attributes then feature.id and last feature.properties.id.
 
+**Assigning custom attributes to SVG element**
+
+If you include a data object in properties of a feature `feature.properties.data`, the keys/values will be attached to the SVG element. See https://www.w3.org/TR/SVG/extend.html#ForeignNamespaces for information on foreign namespace support in SVGs.
+
 ### Examples
 Converts geojson LineString to svg element string:
 ```
@@ -132,6 +136,30 @@ var pathData = converter.convert(
 // pathData: ['M116.66666666666666,44.44444444444444 122.22222222222221,27.77777777777778 111.11111111111111,27.77777777777778 105.55555555555556,38.888888888888886 116.66666666666666,44.44444444444444Z']
 ```
 
+Converts geojson Polygon and attached custom data props:
+```
+var converter = geojson2svg(
+  {
+    viewportSize: {width: 200, height: 100},
+    mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
+    output: 'svg' 
+  }
+);
+var svgString = converter.convert(
+  {
+    "type": "Polygon", 
+    "properties": {
+      "data": {
+        "ns:foo": "bar"
+      }
+    },
+    "coordinates": [
+      [[30, 10], [40, 40], [20, 40], [10, 20], [30, 10]] 
+    ]
+  }
+);
+//svgString: ['<path d="M105.55555555555556,44.44444444444444 108.33333333333333,38.888888888888886 116.66666666666666,44.44444444444444" ns:foo="bar" />']
+```
 Check my blog [maps-on-blackboard](http://maps-on-blackboard.com/tag/geojson2svg/) for more detailed examples.
 ## Developing
 Once you run
