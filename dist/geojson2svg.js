@@ -289,6 +289,11 @@ g2svg.prototype.convertFeature = function(feature,options) {
   opt.attributes = opt.attributes || {};
   opt.attributes.id = opt.attributes.id || feature.id || 
     (feature.properties && feature.properties.id ? feature.properties.id : null);
+  if(feature.properties && feature.properties.data) {
+    for(var key in feature.properties.data) {
+      opt.attributes[key] = feature.properties.data[key]
+    }
+  }
   return this.convertGeometry(feature.geometry,opt);
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
