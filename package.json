@@ -1,6 +1,6 @@
 {
   "name": "geojson2svg",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Converts geojson to svg/path string given svg viewport size and maps extent.",
   "main": "src/main.js",
   "scripts": {
