@@ -1,4 +1,4 @@
-var merge = require('deepmerge'),
+var extend = require('./extend.js')
 	converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
@@ -32,7 +32,7 @@ g2svg.prototype.calResolution = function(extent,size,fitTo) {
   }
 };
 g2svg.prototype.convert = function(geojson,options)  {
-  var opt = merge(this.options, options || {}, {clone: true});
+  var opt = extend(this.options, options || {});
   var multiGeometries = ['MultiPoint','MultiLineString','MultiPolygon'];
   var geometries = ['Point', 'LineString', 'Polygon'];
   var svgElements = [];
@@ -58,15 +58,32 @@ g2svg.prototype.convert = function(geojson,options)  {
 };
 g2svg.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
-  var opt = merge(this.options, options || {}, {clone: true});
-  opt.attributes = opt.attributes || {};
-  opt.attributes.id = opt.attributes.id || feature.id || 
-    (feature.properties && feature.properties.id ? feature.properties.id : null);
+  var opt = extend(this.options, options || {});
+  if (opt.attributes && opt.attributes instanceof Array) {
+    var arr = opt.attributes
+    opt.attributes = arr.reduce(function(sum, path) {
+      var key = path.split('.').pop()
+      var val
+      try {
+        val = valueAt(feature, path)
+      } catch(e) {
+        val = false
+      }
+      if (val) sum[key] = val 
+      return sum
+    }, {})
+  } else {
+    opt.attributes = opt.attributes || {};
+  }
+  var id = opt.attributes.id || feature.id || 
+    (feature.properties && feature.properties.id 
+    ? feature.properties.id : null);
+  if (id) opt.attributes.id = id 
   return this.convertGeometry(feature.geometry,opt);
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
-    var opt = merge(this.options, options || {}, {clone: true});
+    var opt = extend(this.options, options || {});
     var output = opt.output || 'svg';
     var paths = converter[geom.type].call(this,geom,
       this.res,
@@ -89,7 +106,8 @@ g2svg.prototype.convertGeometry = function(geom,options) {
     return;
   }
 };
-var pathToSvgJson = function(path,type,attributes,opt) {
+
+function pathToSvgJson(path,type,attributes,opt) {
   var svg = {};
   var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
     ? opt.pointAsCircle : false;
@@ -108,7 +126,8 @@ var pathToSvgJson = function(path,type,attributes,opt) {
   }
   return svg;
 };
-var jsonToSvgElement = function(json,type,opt) {
+
+function jsonToSvgElement(json,type,opt) {
   var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
     ? opt.pointAsCircle : false;
   var ele ='<path';
@@ -120,6 +139,17 @@ var jsonToSvgElement = function(json,type,opt) {
   }
   ele += '/>';
   return ele;
-};
+}
 
+function valueAt(obj,path) {
+  //taken from http://stackoverflow.com/a/6394168/713573
+  function index(prev,cur, i, arr) { 
+    if (prev.hasOwnProperty(cur)) {
+      return prev[cur]; 
+    } else {
+      throw new Error(arr.slice(0,i+1).join('.') + ' is not a valid property path'); 
+    }
+  }
+  return path.split('.').reduce(index, obj);
+}
 module.exports = g2svg;

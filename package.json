@@ -22,12 +22,12 @@
   "auther": "Gagan Bansal",
   "license": "MIT",
   "dependencies": {
-    "deepmerge": "^1.2.0",
     "multigeojson": "~0.0.1"
   },
   "devDependencies": {
     "browserify": "~5.10.1",
     "chai": "~1.9.1",
+    "deepmerge": "^1.3.2",
     "exorcist": "^0.1.6",
     "jsdom": "^9.8.3",
     "mocha": "~1.21.4",

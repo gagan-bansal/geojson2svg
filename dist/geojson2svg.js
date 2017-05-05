@@ -1,90 +1,4 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var o;"undefined"!=typeof window?o=window:"undefined"!=typeof global?o=global:"undefined"!=typeof self&&(o=self),o.geojson2svg=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(factory);
-    } else if (typeof exports === 'object') {
-        module.exports = factory();
-    } else {
-        root.deepmerge = factory();
-    }
-}(this, function () {
-
-function isMergeableObject(val) {
-    var nonNullObject = val && typeof val === 'object'
-
-    return nonNullObject
-        && Object.prototype.toString.call(val) !== '[object RegExp]'
-        && Object.prototype.toString.call(val) !== '[object Date]'
-}
-
-function emptyTarget(val) {
-    return Array.isArray(val) ? [] : {}
-}
-
-function cloneIfNecessary(value, optionsArgument) {
-    var clone = optionsArgument && optionsArgument.clone === true
-    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
-}
-
-function defaultArrayMerge(target, source, optionsArgument) {
-    var destination = target.slice()
-    source.forEach(function(e, i) {
-        if (typeof destination[i] === 'undefined') {
-            destination[i] = cloneIfNecessary(e, optionsArgument)
-        } else if (isMergeableObject(e)) {
-            destination[i] = deepmerge(target[i], e, optionsArgument)
-        } else if (target.indexOf(e) === -1) {
-            destination.push(cloneIfNecessary(e, optionsArgument))
-        }
-    })
-    return destination
-}
-
-function mergeObject(target, source, optionsArgument) {
-    var destination = {}
-    if (isMergeableObject(target)) {
-        Object.keys(target).forEach(function (key) {
-            destination[key] = cloneIfNecessary(target[key], optionsArgument)
-        })
-    }
-    Object.keys(source).forEach(function (key) {
-        if (!isMergeableObject(source[key]) || !target[key]) {
-            destination[key] = cloneIfNecessary(source[key], optionsArgument)
-        } else {
-            destination[key] = deepmerge(target[key], source[key], optionsArgument)
-        }
-    })
-    return destination
-}
-
-function deepmerge(target, source, optionsArgument) {
-    var array = Array.isArray(source);
-    var options = optionsArgument || { arrayMerge: defaultArrayMerge }
-    var arrayMerge = options.arrayMerge || defaultArrayMerge
-
-    if (array) {
-        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
-    } else {
-        return mergeObject(target, source, optionsArgument)
-    }
-}
-
-deepmerge.all = function deepmergeAll(array, optionsArgument) {
-    if (!Array.isArray(array) || array.length < 2) {
-        throw new Error('first argument should be an array with at least two elements')
-    }
-
-    // we are sure there are at least 2 values, so it is safe to have no initial value
-    return array.reduce(function(prev, next) {
-        return deepmerge(prev, next, optionsArgument)
-    })
-}
-
-return deepmerge
-
-}));
-
-},{}],2:[function(require,module,exports){
 //index.js 
 (function() { 
 	var singles = ['Point', 'LineString', 'Polygon'];
@@ -135,7 +49,7 @@ return deepmerge
 	}
 })();
 
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 //converter.js
 var multi = require('multigeojson');
 function getCoordString(coords,res,origin) {
@@ -224,8 +138,22 @@ module.exports = {
   MultiPolygon: multiPolygon
 };
 
-},{"multigeojson":2}],4:[function(require,module,exports){
-var merge = require('deepmerge'),
+},{"multigeojson":1}],3:[function(require,module,exports){
+// extend.js
+// extend b to a with shallow copy
+module.exports = function(a, b) {
+  var c = {}
+  Object.keys(a).forEach(function(key) {
+    c[key] = a[key]
+  })
+  Object.keys(b).forEach(function(key) {
+    c[key] = b[key]
+  })
+  return c
+} 
+
+},{}],4:[function(require,module,exports){
+var extend = require('./extend.js')
 	converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
@@ -259,7 +187,7 @@ g2svg.prototype.calResolution = function(extent,size,fitTo) {
   }
 };
 g2svg.prototype.convert = function(geojson,options)  {
-  var opt = merge(this.options, options || {}, {clone: true});
+  var opt = extend(this.options, options || {});
   var multiGeometries = ['MultiPoint','MultiLineString','MultiPolygon'];
   var geometries = ['Point', 'LineString', 'Polygon'];
   var svgElements = [];
@@ -285,15 +213,32 @@ g2svg.prototype.convert = function(geojson,options)  {
 };
 g2svg.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
-  var opt = merge(this.options, options || {}, {clone: true});
-  opt.attributes = opt.attributes || {};
-  opt.attributes.id = opt.attributes.id || feature.id || 
-    (feature.properties && feature.properties.id ? feature.properties.id : null);
+  var opt = extend(this.options, options || {});
+  if (opt.attributes && opt.attributes instanceof Array) {
+    var arr = opt.attributes
+    opt.attributes = arr.reduce(function(sum, path) {
+      var key = path.split('.').pop()
+      var val
+      try {
+        val = valueAt(feature, path)
+      } catch(e) {
+        val = false
+      }
+      if (val) sum[key] = val 
+      return sum
+    }, {})
+  } else {
+    opt.attributes = opt.attributes || {};
+  }
+  var id = opt.attributes.id || feature.id || 
+    (feature.properties && feature.properties.id 
+    ? feature.properties.id : null);
+  if (id) opt.attributes.id = id 
   return this.convertGeometry(feature.geometry,opt);
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
-    var opt = merge(this.options, options || {}, {clone: true});
+    var opt = extend(this.options, options || {});
     var output = opt.output || 'svg';
     var paths = converter[geom.type].call(this,geom,
       this.res,
@@ -316,7 +261,8 @@ g2svg.prototype.convertGeometry = function(geom,options) {
     return;
   }
 };
-var pathToSvgJson = function(path,type,attributes,opt) {
+
+function pathToSvgJson(path,type,attributes,opt) {
   var svg = {};
   var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
     ? opt.pointAsCircle : false;
@@ -335,7 +281,8 @@ var pathToSvgJson = function(path,type,attributes,opt) {
   }
   return svg;
 };
-var jsonToSvgElement = function(json,type,opt) {
+
+function jsonToSvgElement(json,type,opt) {
   var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
     ? opt.pointAsCircle : false;
   var ele ='<path';
@@ -347,11 +294,22 @@ var jsonToSvgElement = function(json,type,opt) {
   }
   ele += '/>';
   return ele;
-};
+}
 
+function valueAt(obj,path) {
+  //taken from http://stackoverflow.com/a/6394168/713573
+  function index(prev,cur, i, arr) { 
+    if (prev.hasOwnProperty(cur)) {
+      return prev[cur]; 
+    } else {
+      throw new Error(arr.slice(0,i+1).join('.') + ' is not a valid property path'); 
+    }
+  }
+  return path.split('.').reduce(index, obj);
+}
 module.exports = g2svg;
 
-},{"./converter.js":3,"deepmerge":1}],5:[function(require,module,exports){
+},{"./converter.js":2,"./extend.js":3}],5:[function(require,module,exports){
 var g2svg = require('./instance.js');
 var geojson2svg = function(options) {
   return new g2svg(options);

@@ -57,7 +57,17 @@ var svgString = converter.convert(geojson,options);
 * **fitTo** 'width' | 'height' Fit ouput svg map to width or height.
 
 * **explode:** true | false, default is false. Should multigeojson be exploded to many svg elements or not. 
-* **attributes:** json object containing attribute(key) and values(value) for all svg elements. These attributes would be added to svg string. If option is like
+* **attributes:**  Attributes which are required to attach as SVG attributes from features can be passed here as list of path in feature, like
+
+    ``` {"attributes": ["properties.foo", "properties.bar"]}```
+    
+    output svg string would be:
+
+    ``` <path foo="fooVal-1"  bar="barVal-1" d="M0,0 20,10 106,40"/> ```
+
+    Note: If a feature does not have value at the mentioned path then the attribute key would not be attached to svg string and even error would not be thrown. 
+
+    In case attribute(s) need be attach to all SVG string, a json object containing attribute(key) and values(value) can be passed. If option is like
 
     ``` {"attributes": {"class": "mapstyle"}}```
 
