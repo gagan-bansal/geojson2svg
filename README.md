@@ -57,23 +57,38 @@ var svgString = converter.convert(geojson,options);
 * **fitTo** 'width' | 'height' Fit ouput svg map to width or height.
 
 * **explode:** true | false, default is false. Should multigeojson be exploded to many svg elements or not. 
-* **attributes:**  Attributes which are required to attach as SVG attributes from features can be passed here as list of path in feature, like
+* **attributes:**  Attributes which are required to attach as SVG attributes from features can be passed here as list of path in feature or json object for static attributes, like shown here
 
-    ``` {"attributes": ["properties.foo", "properties.bar"]}```
+    **dynamic**  ``` {"attributes": ["properties.foo", "properties.bar"]}```
+
+    output: ``` [<path foo="fooVal-1"  bar="barVal-1" d="M0,0 20,10 106,40"/>] ```
+
+    or **static** ``` {"attributes": {"class": "mapstyle"}}```
     
-    output svg string would be:
+    outut: ```'<path class="mapstyle" d="M0,0 20,10 106,40"/>'```
 
-    ``` <path foo="fooVal-1"  bar="barVal-1" d="M0,0 20,10 106,40"/> ```
+    or **dynamic** and **static** both
+     
+      {attributes: [
+        {
+          property: 'properties.foo',
+          type: 'dynamic',
+          key: 'id'
+        }, {
+          property: 'properties.baz',
+          type: 'dynamic'
+        }, {
+          property: 'bar',
+          value: 'barStatic',
+          type: 'static'
+        }]
+      })
+
+    
+    output: ``` [ '<path d="M128,128 128.00638801979818,127.99361198020182" id="fooVal-1" baz="bazVal-1" bar="barStatic"/>'] ```
+
 
     Note: If a feature does not have value at the mentioned path then the attribute key would not be attached to svg string and even error would not be thrown. 
-
-    In case attribute(s) need be attach to all SVG string, a json object containing attribute(key) and values(value) can be passed. If option is like
-
-    ``` {"attributes": {"class": "mapstyle"}}```
-
-    returned string would be 
-
-    ```'<path class="mapstyle" d="M0,0 20,10 106,40"/>'```
 
 * **pointAsCircle:** true | false, default is false. For point geojson return circle element for option:
     ``` { "pointAsCircel": true } ```

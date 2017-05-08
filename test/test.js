@@ -120,6 +120,7 @@ describe('geojson2svg', function() {
       testSVG(actualOutput, testData['Default values'].svg, 
         testData['Default values'].geojson.type, precision);
     });
+    
     it('add attributes to svg based on each feature properties:', function() {
       var converter = geojson2svg(
         {attributes: ['properties.foo', 'properties.bar', 'properties.baz']})
@@ -148,6 +149,50 @@ describe('geojson2svg', function() {
       expect(svgEle2.getAttribute('bar')).to.be.equal('barVal-2');
       expect(svgEle2.getAttribute('baz')).to.be.null;
     });
+
+    it('add attributes to svg based on each feature properties and static attributes also:', function() {
+      var converter = geojson2svg(
+        {attributes: [
+          {
+            property: 'properties.foo',
+            type: 'dynamic',
+            key: 'id'
+          }, {
+            property: 'properties.baz',
+            type: 'dynamic'
+          }, {
+            property: 'bar',
+            value: 'barStatic',
+            type: 'static'
+          }]
+        })
+      var svgStr = converter.convert({
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature', 
+          geometry: {type: 'LineString', coordinates: [[0,0], [1000,1000]]},
+          properties: {foo: 'fooVal-1', bar: 'barVal-1', baz: 'bazVal-1'}
+        }, {
+          type: 'Feature', 
+          geometry: {type: 'LineString', coordinates: [[10,10], [100,100]]},
+          properties: {foo: 'fooVal-2', bar: 'barVal-2'}
+        }]
+      })
+      var svgEle1 = jsdom(svgStr[0]).firstChild.children[1].children[0];
+      expect(svgEle1).to.respondTo('getAttribute');
+      expect(svgEle1.getAttribute('id')).to.be.equal('fooVal-1');
+      expect(svgEle1.getAttribute('bar')).to.be.equal('barStatic');
+      expect(svgEle1.getAttribute('baz')).to.be.equal('bazVal-1');
+      expect(svgEle1.getAttribute('foo')).to.be.null;
+
+      var svgEle2 = jsdom(svgStr[1]).firstChild.children[1].children[0];
+      expect(svgEle2).to.respondTo('getAttribute');
+      expect(svgEle2.getAttribute('id')).to.be.equal('fooVal-2');
+      expect(svgEle2.getAttribute('bar')).to.be.equal('barStatic');
+      expect(svgEle2.getAttribute('baz')).to.be.null;
+      expect(svgEle2.getAttribute('foo')).to.be.null;
+    });
+
     it('add given attributes in options to all svg elements: ' 
       + 'pass attributes in constructor', function() {
       var converter = geojson2svg({attributes: {class: 'foo'}});

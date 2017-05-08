@@ -216,15 +216,31 @@ g2svg.prototype.convertFeature = function(feature,options) {
   var opt = extend(this.options, options || {});
   if (opt.attributes && opt.attributes instanceof Array) {
     var arr = opt.attributes
-    opt.attributes = arr.reduce(function(sum, path) {
-      var key = path.split('.').pop()
-      var val
-      try {
-        val = valueAt(feature, path)
-      } catch(e) {
-        val = false
+    opt.attributes = arr.reduce(function(sum, property) {
+      if (typeof(property) === 'string') {
+        var val, key = property.split('.').pop()
+        try {
+          val = valueAt(feature, property)
+        } catch(e) {
+          val = false
+        }
+        if (val) sum[key] = val
+      } else if (typeof(property) === 'object' && property.type
+        && property.property)
+      {
+        if (property.type === 'dynamic') {
+          var val, key = property.key ? property.key 
+            : property.property.split('.').pop()
+          try {
+            val = valueAt(feature, property.property)
+          } catch(e) {
+            val = false
+          }
+          if (val) sum[key] = val
+        } else if (property.type === 'static'  && property.value) {
+          sum[property.property] = property.value
+        }
       }
-      if (val) sum[key] = val 
       return sum
     }, {})
   } else {
