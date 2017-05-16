@@ -1,5 +1,5 @@
-var extend = require('./extend.js')
-	converter = require('./converter.js');
+var extend = require('./extend.js');
+var converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
 var g2svg = function(options) {
