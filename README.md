@@ -22,14 +22,33 @@ Using in node.js or with browserify
 ```javascript
 var geojson2svg = require('geojson2svg');
 var converter = geojson2svg(options);
-var svgString = converter.convert(geojson,options);
+var svgStrings = converter.convert(geojson,options);
 ```
 Using in browser standard way
 ```
 var converter = geojson2svg(options);
-var svgString = converter.convert(geojson,options);
+var svgStrings = converter.convert(geojson,options);
 ```
 **convert** function returns array of svg element string
+
+Now svg strings can be easily converted to HTML svg elements. Intentionally I have kept the geojson2svg's output as string to make it more modular. Here is simple way to convert svg strings to svg elements with [parse-svg](https://github.com/gagan-bansal/parse-svg) or with any other parser.
+
+```shell
+npm isntall parse-svg
+```
+or include in your html file 
+```html
+<script type="text/javascript" src="path/to/parse-svg.min.js"></script>
+```
+Simple way to convert svgStrings to svg elements
+
+```javascript
+var parseSVG = require('parse-svg')
+var svgElements = svgStrings.map(function(svgString) {
+  return parseSVG(svgString)
+})
+```
+
 ### Options
 
 * **viewportSize** is object containing width and height in pixels. Default viewportSize values are:
@@ -107,7 +126,7 @@ var svgString = converter.convert(geojson,options);
   
 The options **'attributes'**, **'r'** and **'callback'** can also be given in **convert** function 
 ``` 
-var svgString = convertor.convert(geojson, 
+var svgStrings = convertor.convert(geojson, 
   {
     "attributes": ...,
     "r": ...,
@@ -132,10 +151,10 @@ var converter = geojson2svg(
     output: 'svg' 
   }
 );
-var svgString = converter.convert(
+var svgStrings = converter.convert(
   {type:'LineString',coordinates:[[10,10],[15,20],[30,10]]}
 );
-//svgString: ['<path d="M105.55555555555556,44.44444444444444 108.33333333333333,38.888888888888886 116.66666666666666,44.44444444444444" />']
+//svgStrings: ['<path d="M105.55555555555556,44.44444444444444 108.33333333333333,38.888888888888886 116.66666666666666,44.44444444444444" />']
 ```
 Converts geojson Polygon to svg path data 'd' string:
 ```
