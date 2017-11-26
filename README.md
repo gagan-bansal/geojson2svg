@@ -34,7 +34,7 @@ var svgStrings = converter.convert(geojson,options);
 Now svg strings can be easily converted to HTML svg elements. Intentionally I have kept the geojson2svg's output as string to make it more modular. Here is simple way to convert svg strings to svg elements with [parse-svg](https://github.com/gagan-bansal/parse-svg) or with any other parser.
 
 ```shell
-npm isntall parse-svg
+npm install parse-svg
 ```
 or include in your html file 
 ```html
