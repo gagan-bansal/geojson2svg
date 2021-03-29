@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>Example of world map created with geojson2svg</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/proj4js/2.2.2/proj4.js"></script>
+    <script type="text/javascript" src="./js/reproject.min.js"></script>
+    <script type="text/javascript" src="./js/getjson.js"></script>
+    <script type="text/javascript" src="../dist/geojson2svg.min.js"></script>
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/geojson2svg/0.1.2/geojson2svg.min.js"></script-->
+  </head>
+  <body>
+    <h2>Example of world map created with geojson2svg</h2>
+    This example shows how easily svg map can be scaled using <code>viewBox</code> tag of SVG. One most comman use case is adjustable width of the map.
+    Here is the HTML code that is used in this example:
+<p><pre>
+  &lt;div id="mapArea" style="width:100%;height:200px;border:1px solid;overflow:hidden;"&gt;
+    &lt;svg id="map" xmlns="http://www.w3.org/2000/svg"
+      width="100%" viewBox="0 200 800 800"&gt;
+    &lt;/svg&gt;
+  &lt;/div&gt;
+</pre></p>
+    <div id="mapArea" style="width:100%;height:200px;border:1px solid;overflow:hidden;">
+      <svg id="map" xmlns="http://www.w3.org/2000/svg"
+        width="100%" viewBox="0 200 800 800">
+      </svg>
+    </div>
+    <br>
+    The SVG tag <code>viewBox</code>  has been explained very well in <a href="https://stackoverflow.com/a/19485375/713573" target="_blank">this</a> stackoverflow answer with example.
+    <script type="text/javascript" src="./js/world.js"></script>
+  </body>
+</html>
