@@ -178,7 +178,7 @@ var pathData = converter.convert(
 // pathData: ['M116.66666666666666,44.44444444444444 122.22222222222221,27.77777777777778 111.11111111111111,27.77777777777778 105.55555555555556,38.888888888888886 116.66666666666666,44.44444444444444Z']
 ```
 
-Check my blog [maps-on-blackboard](http://maps-on-blackboard.com/tag/geojson2svg/) for more detailed examples.
+Check my blog [maps-on-blackboard](http://maps-on-blackboard.github.io/tag/geojson2svg/) for more detailed examples.
 ## Developing
 Once you run
  
