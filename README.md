@@ -31,9 +31,37 @@ Using in browser standard way
 var converter = geojson2svg(options);
 var svgStrings = converter.convert(geojson,options);
 ```
-**convert** function returns array of svg element string
 
-Now svg strings can be easily converted to HTML svg elements. Intentionally I have kept the geojson2svg's output as string to make it more modular. Here is simple way to convert svg strings to svg elements with [parse-svg](https://github.com/gagan-bansal/parse-svg) or with any other parser.
+### Basic Example
+```javascript
+var geojson2svg = require('geojson2svg');
+
+var converter = geojson2svg({
+   attributes: ['properties.foo', 'properties.bar', 'properties.baz']
+});
+var svgStr = converter.convert({
+  type: 'FeatureCollection',
+  features: [{
+    type: 'Feature',
+    geometry: {type: 'LineString', coordinates: [[0,0], [1000,1000]]},
+    properties: {foo: 'fooVal-1', bar: 'barVal-1', baz: 'bazVal-1'}
+  }, {
+    type: 'Feature',
+    geometry: {type: 'LineString', coordinates: [[10,10], [100,100]]},
+    properties: {foo: 'fooVal-2', bar: 'barVal-2'}
+  }]
+});
+
+console.log(svgStr);
+/* output
+[
+  '<path d="M128,128 128.00638801979818,127.99361198020182" foo="fooVal-1" bar="barVal-1" baz="bazVal-1"/>',
+  '<path d="M128.00006388019798,127.99993611980202 128.00063880197982,127.99936119802018" foo="fooVal-2" bar="barVal-2"/>'
+]
+```
+**convert** function returns an array of svg elements' strings.
+
+Now svg strings can be easily converted to HTML svg elements. Intentionally I have kept the geojson2svg's output as string to make it more modular. Here is simple way to convert svg strings to svg elements with [parse-svg](https://github.com/gagan-bansal/parse-svg) or with any other parser. Read more about SVG string conversion to DOM Element [here](https://stackoverflow.com/a/3642265/713573).
 
 ```shell
 npm install parse-svg
