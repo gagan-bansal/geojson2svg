@@ -8,6 +8,8 @@
     "build-debug": "browserify src/main.js --debug --standalone geojson2svg | exorcist dist/geojson2svg.js.map > dist/geojson2svg.js",
     "build-min": "browserify src/main.js --standalone geojson2svg | uglifyjs -c > dist/geojson2svg.min.js",
     "build": "npm run build-debug && npm run build-min",
+    "rebuild-changelog": "auto-changelog",
+    "release": "standard-version",
     "watch": "watchify src/main.js --debug --standalone geojson2svg -o dist/geojson2svg.js -v"
   },
   "keywords": [
@@ -25,6 +27,7 @@
     "multigeojson": "~0.0.1"
   },
   "devDependencies": {
+    "auto-changelog": "^2.3.0",
     "browserify": "~17.0.0",
     "chai": "~4.3.4",
     "deepmerge": "^4.2.2",
@@ -32,6 +35,7 @@
     "jsdom": "^9.8.3",
     "mocha": "~8.3.2",
     "parse-svg-path": "~0.1.2",
+    "standard-version": "^9.3.2",
     "uglify-js": "^3.13.3",
     "watchify": "^4.0.0"
   }
