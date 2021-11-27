@@ -1,3 +1,9 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [1.2.9](https://github.com/gagan-bansal/geojson2svg/compare/v1.2.8...v1.2.9) (2021-11-27)
+
 ### Changelog
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
