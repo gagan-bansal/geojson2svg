@@ -4,9 +4,10 @@ var merge = require('deepmerge');
 var basics = ['Point', 'LineString', 'Polygon', 'MultiPoint', 'MultiLineString',
  'MultiPolygon'];
 var testData = require('./testdata.js');
-var expect = require('chai').expect
-  ,parsePath = require('parse-svg-path')
-  ,jsdom = require('jsdom').jsdom;
+var expect = require('chai').expect;
+var parsePath = require('parse-svg-path');
+var jsdom = require('jsdom');
+var {JSDOM} = jsdom;
 
 describe('geojson2svg', function() {
   var precision = testData.precision;
@@ -33,7 +34,7 @@ describe('geojson2svg', function() {
         {pointAsCircle: true});
       expect(actualSVGs).to.be.an('array');
       expect(actualSVGs.length).to.be.equal(1);
-      var actSVGEle = jsdom(actualSVGs).firstChild.children[1].children[0];
+      var actSVGEle = string2dom(actualSVGs);
         expect(actSVGEle.nodeName).to.be.equal('CIRCLE');
         expect(actSVGEle.hasAttribute('cx'))
         expect(parseFloat(actSVGEle.getAttribute('cx')))
@@ -96,9 +97,9 @@ describe('geojson2svg', function() {
           testData.featureCollection.geojson.features[i].geometry.type,precision);
       }
     });
-    it('Polygon fit to width', function() { 
+    it('Polygon fit to width', function() {
       var converter2 = geojson2svg(
-        { 
+        {
           viewportSize: {width: 300, height: 100},
           mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
           fitTo: 'width',
@@ -117,33 +118,33 @@ describe('geojson2svg', function() {
     it('Default vieport size and default maps extent.', function() {
       var converter = geojson2svg();
       var actualOutput = converter.convert(testData['Default values'].geojson);
-      testSVG(actualOutput, testData['Default values'].svg, 
+      testSVG(actualOutput, testData['Default values'].svg,
         testData['Default values'].geojson.type, precision);
     });
-    
+
     it('add attributes to svg based on each feature properties:', function() {
       var converter = geojson2svg(
         {attributes: ['properties.foo', 'properties.bar', 'properties.baz']})
       var svgStr = converter.convert({
         type: 'FeatureCollection',
         features: [{
-          type: 'Feature', 
+          type: 'Feature',
           geometry: {type: 'LineString', coordinates: [[0,0], [1000,1000]]},
           properties: {foo: 'fooVal-1', bar: 'barVal-1', baz: 'bazVal-1'}
         }, {
-          type: 'Feature', 
+          type: 'Feature',
           geometry: {type: 'LineString', coordinates: [[10,10], [100,100]]},
           properties: {foo: 'fooVal-2', bar: 'barVal-2'}
         }]
       })
 
-      var svgEle1 = jsdom(svgStr[0]).firstChild.children[1].children[0];
+      var svgEle1 = string2dom(svgStr[0]);
       expect(svgEle1).to.respondTo('getAttribute');
       expect(svgEle1.getAttribute('foo')).to.be.equal('fooVal-1');
       expect(svgEle1.getAttribute('bar')).to.be.equal('barVal-1');
       expect(svgEle1.getAttribute('baz')).to.be.equal('bazVal-1');
 
-      var svgEle2 = jsdom(svgStr[1]).firstChild.children[1].children[0];
+      var svgEle2 = string2dom(svgStr[1]);
       expect(svgEle2).to.respondTo('getAttribute');
       expect(svgEle2.getAttribute('foo')).to.be.equal('fooVal-2');
       expect(svgEle2.getAttribute('bar')).to.be.equal('barVal-2');
@@ -169,23 +170,23 @@ describe('geojson2svg', function() {
       var svgStr = converter.convert({
         type: 'FeatureCollection',
         features: [{
-          type: 'Feature', 
+          type: 'Feature',
           geometry: {type: 'LineString', coordinates: [[0,0], [1000,1000]]},
           properties: {foo: 'fooVal-1', bar: 'barVal-1', baz: 'bazVal-1'}
         }, {
-          type: 'Feature', 
+          type: 'Feature',
           geometry: {type: 'LineString', coordinates: [[10,10], [100,100]]},
           properties: {foo: 'fooVal-2', bar: 'barVal-2'}
         }]
       })
-      var svgEle1 = jsdom(svgStr[0]).firstChild.children[1].children[0];
+      var svgEle1 = string2dom(svgStr[0]);
       expect(svgEle1).to.respondTo('getAttribute');
       expect(svgEle1.getAttribute('id')).to.be.equal('fooVal-1');
       expect(svgEle1.getAttribute('bar')).to.be.equal('barStatic');
       expect(svgEle1.getAttribute('baz')).to.be.equal('bazVal-1');
       expect(svgEle1.getAttribute('foo')).to.be.null;
 
-      var svgEle2 = jsdom(svgStr[1]).firstChild.children[1].children[0];
+      var svgEle2 = string2dom(svgStr[1]);
       expect(svgEle2).to.respondTo('getAttribute');
       expect(svgEle2.getAttribute('id')).to.be.equal('fooVal-2');
       expect(svgEle2.getAttribute('bar')).to.be.equal('barStatic');
@@ -193,12 +194,12 @@ describe('geojson2svg', function() {
       expect(svgEle2.getAttribute('foo')).to.be.null;
     });
 
-    it('add given attributes in options to all svg elements: ' 
+    it('add given attributes in options to all svg elements: '
       + 'pass attributes in constructor', function() {
       var converter = geojson2svg({attributes: {class: 'foo'}});
       var output = converter.convert(
         {type:'LineString', coordinates: [[0,0], [1000,1000]]});
-      var outputEle = jsdom(output).firstChild.children[1].children[0];
+      var outputEle = string2dom(output);
       expect(outputEle).to.respondTo('getAttribute');
       expect(outputEle.getAttribute('class')).to.be.equal('foo');
     });
@@ -209,7 +210,7 @@ describe('geojson2svg', function() {
         {type:'LineString', coordinates: [[0,0], [1000,1000]]},
         {attributes: {class: 'foo',id: 'foo-1'}}
       );
-      var outputEle = jsdom(output).firstChild.children[1].children[0];
+      var outputEle = string2dom(output);
       expect(outputEle).to.respondTo('getAttribute');
       expect(outputEle.getAttribute('class')).to.be.equal('foo');
       expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
@@ -221,7 +222,7 @@ describe('geojson2svg', function() {
         id: 'foo-1',
         geometry: {type:'LineString', coordinates: [[0,0], [1000,1000]]}
       });
-      var outputEle = jsdom(output).firstChild.children[1].children[0];
+      var outputEle = string2dom(output);
       expect(outputEle).to.respondTo('getAttribute');
       expect(outputEle.getAttribute('class')).to.be.equal('foo');
       expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
@@ -233,7 +234,7 @@ describe('geojson2svg', function() {
         geometry: {type:'LineString', coordinates: [[0,0], [1000,1000]]},
         properties: {id: 'foo-1', name: 'bar'}
       });
-      var outputEle = jsdom(output).firstChild.children[1].children[0];
+      var outputEle = string2dom(output);
       expect(outputEle).to.respondTo('getAttribute');
       expect(outputEle.getAttribute('class')).to.be.equal('foo');
       expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
@@ -246,8 +247,8 @@ function testSVG(actualSVGs,expSVGs,type,precision) {
   expect(actualSVGs.length).to.be.equal(expSVGs.length);
   var expSVGEle,actSVGEle,expPaths,actPaths;
   //for(var i=0;i<expSVGs.length; i++) {
-    expSVGEle = jsdom(expSVGs).firstChild.children[1].children[0];
-    actSVGEle = jsdom(actualSVGs).firstChild.children[1].children[0];
+    expSVGEle = string2dom(expSVGs);
+    actSVGEle = string2dom(actualSVGs);
     expect(actSVGEle.nodeName).to.be.equal('PATH');
     expect(actSVGEle.hasAttribute('d')).to.be.true;
     expPaths = expSVGEle.getAttribute('d');
@@ -284,4 +285,8 @@ function testPath(actualPaths,expPaths,type,precision) {
       }
     }
   }
+}
+
+function string2dom (str) {
+  return (new JSDOM(str)).window.document.body.firstChild
 }
