@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.13](https://github.com/gagan-bansal/geojson2svg/compare/v1.2.12...v1.2.13) (2022-01-20)
+
+
+### Docs
+
+* added some more cmd help ([221345f](https://github.com/gagan-bansal/geojson2svg/commit/221345f9ed1d823e667a7216607a8800ef3e7614))
+
 ### [1.2.12](https://github.com/gagan-bansal/geojson2svg/compare/v1.2.11...v1.2.12) (2022-01-20)
 
 ### Changelog
