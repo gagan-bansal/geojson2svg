@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.14](https://github.com/gagan-bansal/geojson2svg/compare/v1.2.13...v1.2.14) (2022-01-20)
+
+
+### Features
+
+* **notifier:** added splash also ([18887d1](https://github.com/gagan-bansal/geojson2svg/commit/18887d1f4d52a3bddb3a03d524b2aeb8db0fcc14))
+
 ### [1.2.13](https://github.com/gagan-bansal/geojson2svg/compare/v1.2.12...v1.2.13) (2022-01-20)
 
 
