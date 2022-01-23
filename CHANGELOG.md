@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/gagan-bansal/geojson2svg/compare/v1.2.9...v1.3.0) (2022-01-23)
+
+
+### Features
+
+* svg output precision option added ([b474cd7](https://github.com/gagan-bansal/geojson2svg/commit/b474cd743df54fbe9498a43ae849e2169e93f0a0))
+
 ### [1.2.9](https://github.com/gagan-bansal/geojson2svg/compare/v1.2.8...v1.2.9) (2021-11-27)
 
 ### Changelog
