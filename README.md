@@ -66,7 +66,7 @@ Now svg strings can be easily converted to HTML svg elements. Intentionally I ha
 ```shell
 npm install parse-svg
 ```
-or include in your html file 
+or include in your html file
 ```html
 <script type="text/javascript" src="path/to/parse-svg.min.js"></script>
 ```
@@ -105,7 +105,9 @@ var svgElements = svgStrings.map(function(svgString) {
 
 * **fitTo** 'width' | 'height' Fit ouput svg map to width or height.
 
-* **explode:** true | false, default is false. Should multigeojson be exploded to many svg elements or not. 
+* **precision** a number, precision of output svg coordinates. Default is false.
+
+* **explode:** true | false, default is false. Should multigeojson be exploded to many svg elements or not.
 * **attributes:**  Attributes which are required to attach as SVG attributes from features can be passed here as list of path in feature or json object for static attributes, like shown here
 
     **dynamic**  ``` {"attributes": ["properties.foo", "properties.bar"]}```
@@ -113,11 +115,11 @@ var svgElements = svgStrings.map(function(svgString) {
     output: ``` [<path foo="fooVal-1"  bar="barVal-1" d="M0,0 20,10 106,40"/>] ```
 
     or **static** ``` {"attributes": {"class": "mapstyle"}}```
-    
+
     outut: ```'<path class="mapstyle" d="M0,0 20,10 106,40"/>'```
 
     or **dynamic** and **static** both
-     
+
       {attributes: [
         {
           property: 'properties.foo',
@@ -133,11 +135,11 @@ var svgElements = svgStrings.map(function(svgString) {
         }]
       })
 
-    
+
     output: ``` [ '<path d="M128,128 128.00638801979818,127.99361198020182" id="fooVal-1" baz="bazVal-1" bar="barStatic"/>'] ```
 
 
-    Note: If a feature does not have value at the mentioned path then the attribute key would not be attached to svg string and even error would not be thrown. 
+    Note: If a feature does not have value at the mentioned path then the attribute key would not be attached to svg string and even error would not be thrown.
 
 * **pointAsCircle:** true | false, default is false. For point geojson return circle element for option:
     ``` { "pointAsCircel": true } ```
@@ -153,10 +155,10 @@ var svgElements = svgStrings.map(function(svgString) {
    ```
 
    Callback function could be used to render SVG string.
-  
-The options **'attributes'**, **'r'** and **'callback'** can also be given in **convert** function 
-``` 
-var svgStrings = convertor.convert(geojson, 
+
+The options **'attributes'**, **'r'** and **'callback'** can also be given in **convert** function
+```
+var svgStrings = convertor.convert(geojson,
   {
     "attributes": ...,
     "r": ...,
@@ -178,7 +180,7 @@ var converter = geojson2svg(
   {
     viewportSize: {width: 200, height: 100},
     mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
-    output: 'svg' 
+    output: 'svg'
   }
 );
 var svgStrings = converter.convert(
@@ -190,16 +192,16 @@ Converts geojson Polygon to svg path data 'd' string:
 ```
 var converter = geojson2svg(
   {
-    viewportExtent: {width: 200, height: 100}, 
+    viewportExtent: {width: 200, height: 100},
     mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
     output: 'path'
   }
 );
 var pathData = converter.convert(
   {
-    "type": "Polygon", 
+    "type": "Polygon",
     "coordinates": [
-      [[30, 10], [40, 40], [20, 40], [10, 20], [30, 10]] 
+      [[30, 10], [40, 40], [20, 40], [10, 20], [30, 10]]
     ]
   }
 );
@@ -209,10 +211,10 @@ var pathData = converter.convert(
 Check my blog [maps-on-blackboard](http://maps-on-blackboard.github.io/tag/geojson2svg/) for more detailed examples.
 ## Developing
 Once you run
- 
+
 ```npm install```
 
-then for running test 
+then for running test
 
 ```npm run test```
 

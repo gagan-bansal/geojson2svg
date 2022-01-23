@@ -4,7 +4,7 @@ var converter = require('./converter.js');
 //g2svg as geojson2svg (shorthand)
 var g2svg = function(options) {
   this.options = options || {};
-  this.viewportSize = this.options.viewportSize || 
+  this.viewportSize = this.options.viewportSize ||
     {width: 256, height: 256};
   this.mapExtent = this.options.mapExtent ||
     {
@@ -19,7 +19,7 @@ var g2svg = function(options) {
 g2svg.prototype.calResolution = function(extent,size,fitTo) {
   var xres = (extent.right - extent.left)/size.width;
   var yres = (extent.top - extent.bottom)/size.height;
-  if (fitTo) { 
+  if (fitTo) {
     if (fitTo.toLowerCase() === 'width') {
       return xres;
     } else if (fitTo.toLowerCase() === 'height') {
@@ -74,7 +74,7 @@ g2svg.prototype.convertFeature = function(feature,options) {
         && property.property)
       {
         if (property.type === 'dynamic') {
-          var val, key = property.key ? property.key 
+          var val, key = property.key ? property.key
             : property.property.split('.').pop()
           try {
             val = valueAt(feature, property.property)
@@ -91,10 +91,10 @@ g2svg.prototype.convertFeature = function(feature,options) {
   } else {
     opt.attributes = opt.attributes || {};
   }
-  var id = opt.attributes.id || feature.id || 
-    (feature.properties && feature.properties.id 
+  var id = opt.attributes.id || feature.id ||
+    (feature.properties && feature.properties.id
     ? feature.properties.id : null);
-  if (id) opt.attributes.id = id 
+  if (id) opt.attributes.id = id;
   return this.convertGeometry(feature.geometry,opt);
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
@@ -125,7 +125,7 @@ g2svg.prototype.convertGeometry = function(geom,options) {
 
 function pathToSvgJson(path,type,attributes,opt) {
   var svg = {};
-  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle')
     ? opt.pointAsCircle : false;
   if((type == 'Point' || type == 'MultiPoint') && pointAsCircle) {
     svg['cx'] = path.split(',')[0];
@@ -134,8 +134,8 @@ function pathToSvgJson(path,type,attributes,opt) {
   } else {
     svg = {d: path};
     if(type == 'Polygon' || type == 'MultiPolygon') {
-      svg['fill-rule'] == 'evenodd'; 
-    } 
+      svg['fill-rule'] == 'evenodd';
+    }
   }
   for (var key in attributes) {
     svg[key]= attributes[key];
@@ -144,7 +144,7 @@ function pathToSvgJson(path,type,attributes,opt) {
 };
 
 function jsonToSvgElement(json,type,opt) {
-  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle')
     ? opt.pointAsCircle : false;
   var ele ='<path';
   if((type == 'Point' || type == 'MultiPoint') && pointAsCircle) {
@@ -159,11 +159,11 @@ function jsonToSvgElement(json,type,opt) {
 
 function valueAt(obj,path) {
   //taken from http://stackoverflow.com/a/6394168/713573
-  function index(prev,cur, i, arr) { 
+  function index(prev,cur, i, arr) {
     if (prev.hasOwnProperty(cur)) {
-      return prev[cur]; 
+      return prev[cur];
     } else {
-      throw new Error(arr.slice(0,i+1).join('.') + ' is not a valid property path'); 
+      throw new Error(arr.slice(0,i+1).join('.') + ' is not a valid property path');
     }
   }
   return path.split('.').reduce(index, obj);

@@ -52,10 +52,17 @@
 },{}],2:[function(require,module,exports){
 //converter.js
 var multi = require('multigeojson');
-function getCoordString(coords,res,origin) {
-  //origin - svg image origin 
-  var coordStr = coords.map(function(coord) {
-    return (coord[0] - origin.x)/res + ',' + (origin.y - coord[1])/res;
+function getCoordString(coords,res,origin, precision) {
+  //origin - svg image origin
+  var convertedCoords = coords.map(function(coord) {
+    return [(coord[0] - origin.x)/res, (origin.y - coord[1])/res];
+  });
+  var coordStr = convertedCoords.map(function (coord) {
+    if (precision) {
+      return coord[0].toFixed(precision) + ',' + coord[1].toFixed(precision);
+    } else {
+      return coord[0] + ',' + coord[1];
+    }
   });
   return coordStr.join(' ');
 }
@@ -71,14 +78,14 @@ function addAttributes(ele,attributes) {
 
 function point(geom,res,origin,opt) {
   var r = opt && opt.r ? opt.r : 1;
-  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle')
     ? opt.pointAsCircle : false;
-  var coords = getCoordString([geom.coordinates],res,origin);
+  var coords = getCoordString([geom.coordinates],res,origin,opt.precision);
   if (pointAsCircle) {
     return [coords];
   } else {
     return [
-      'M' + coords 
+      'M' + coords
       + ' m'+ -r+ ',0'+ ' a'+r+','+ r + ' 0 1,1 '+ 2*r + ','+0
       + ' a'+r+','+ r + ' 0 1,1 '+ -2*r + ','+0
     ];
@@ -93,9 +100,9 @@ function multiPoint(geom,res,origin,opt) {
   return paths;
 
 }
-function lineString(geom,res,origin,otp) {
-  var coords = getCoordString(geom.coordinates,res,origin);
-  var path = 'M'+ coords;  
+function lineString(geom,res,origin,opt) {
+  var coords = getCoordString(geom.coordinates,res,origin,opt.precision);
+  var path = 'M'+ coords;
   return [path];
 }
 function multiLineString(geom,res,origin,opt) {
@@ -108,14 +115,14 @@ function multiLineString(geom,res,origin,opt) {
 }
 function polygon(geom,res,origin,opt) {
   var mainStr,holes,holeStr;
-  mainStr = getCoordString(geom.coordinates[0],res,origin);
+  mainStr = getCoordString(geom.coordinates[0],res,origin,opt.precision);
   if (geom.coordinates.length > 1) {
     holes = geom.coordinates.slice(1,geom.coordinates.length);
   }
   var path = 'M'+ mainStr;
   if(holes) {
     for(var i=0;i<holes.length; i++) {
-      path += ' M' +  getCoordString(holes[i],res,origin);
+      path += ' M' +  getCoordString(holes[i],res,origin,opt.precision);
     }
   }
   path += 'Z';
@@ -159,7 +166,7 @@ var converter = require('./converter.js');
 //g2svg as geojson2svg (shorthand)
 var g2svg = function(options) {
   this.options = options || {};
-  this.viewportSize = this.options.viewportSize || 
+  this.viewportSize = this.options.viewportSize ||
     {width: 256, height: 256};
   this.mapExtent = this.options.mapExtent ||
     {
@@ -174,7 +181,7 @@ var g2svg = function(options) {
 g2svg.prototype.calResolution = function(extent,size,fitTo) {
   var xres = (extent.right - extent.left)/size.width;
   var yres = (extent.top - extent.bottom)/size.height;
-  if (fitTo) { 
+  if (fitTo) {
     if (fitTo.toLowerCase() === 'width') {
       return xres;
     } else if (fitTo.toLowerCase() === 'height') {
@@ -229,7 +236,7 @@ g2svg.prototype.convertFeature = function(feature,options) {
         && property.property)
       {
         if (property.type === 'dynamic') {
-          var val, key = property.key ? property.key 
+          var val, key = property.key ? property.key
             : property.property.split('.').pop()
           try {
             val = valueAt(feature, property.property)
@@ -246,10 +253,10 @@ g2svg.prototype.convertFeature = function(feature,options) {
   } else {
     opt.attributes = opt.attributes || {};
   }
-  var id = opt.attributes.id || feature.id || 
-    (feature.properties && feature.properties.id 
+  var id = opt.attributes.id || feature.id ||
+    (feature.properties && feature.properties.id
     ? feature.properties.id : null);
-  if (id) opt.attributes.id = id 
+  if (id) opt.attributes.id = id;
   return this.convertGeometry(feature.geometry,opt);
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
@@ -280,7 +287,7 @@ g2svg.prototype.convertGeometry = function(geom,options) {
 
 function pathToSvgJson(path,type,attributes,opt) {
   var svg = {};
-  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle')
     ? opt.pointAsCircle : false;
   if((type == 'Point' || type == 'MultiPoint') && pointAsCircle) {
     svg['cx'] = path.split(',')[0];
@@ -289,8 +296,8 @@ function pathToSvgJson(path,type,attributes,opt) {
   } else {
     svg = {d: path};
     if(type == 'Polygon' || type == 'MultiPolygon') {
-      svg['fill-rule'] == 'evenodd'; 
-    } 
+      svg['fill-rule'] == 'evenodd';
+    }
   }
   for (var key in attributes) {
     svg[key]= attributes[key];
@@ -299,7 +306,7 @@ function pathToSvgJson(path,type,attributes,opt) {
 };
 
 function jsonToSvgElement(json,type,opt) {
-  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle') 
+  var pointAsCircle = opt && opt.hasOwnProperty('pointAsCircle')
     ? opt.pointAsCircle : false;
   var ele ='<path';
   if((type == 'Point' || type == 'MultiPoint') && pointAsCircle) {
@@ -314,11 +321,11 @@ function jsonToSvgElement(json,type,opt) {
 
 function valueAt(obj,path) {
   //taken from http://stackoverflow.com/a/6394168/713573
-  function index(prev,cur, i, arr) { 
+  function index(prev,cur, i, arr) {
     if (prev.hasOwnProperty(cur)) {
-      return prev[cur]; 
+      return prev[cur];
     } else {
-      throw new Error(arr.slice(0,i+1).join('.') + ' is not a valid property path'); 
+      throw new Error(arr.slice(0,i+1).join('.') + ' is not a valid property path');
     }
   }
   return path.split('.').reduce(index, obj);

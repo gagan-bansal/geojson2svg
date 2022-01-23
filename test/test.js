@@ -46,6 +46,15 @@ describe('geojson2svg', function() {
         expect(actSVGEle.getAttribute('r'))
           .to.be.equal('2');
     });
+    it('Output svg coordinates precision', function() {
+      var geojson = {type:'LineString',coordinates:[[10,10],[15,20],[30,10]]};
+      var expSVGs = ['<path d="M105.556,44.444 108.333,38.889 116.667,44.444"/>'];
+      var converter = geojson2svg(testData.options);
+      var actualSVGs = converter.convert(geojson, {precision: 3});
+      expect(actualSVGs).to.be.an('array');
+      expect(actualSVGs.length).to.be.equal(1);
+      expect(actualSVGs).to.be.deep.equal(expSVGs);
+    });
     it('Feature {output: "path",explode: false}', function() {
       var actualPaths = converter.convert(testData.feature.geojson,
         {output:'path',explode:false});
