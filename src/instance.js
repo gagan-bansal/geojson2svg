@@ -1,21 +1,52 @@
-var extend = require('./extend.js');
+var bbox = require('geojson-bbox');
+//var extend = require('./extend.js');
+var extend = require('extend');
 var converter = require('./converter.js');
 
 //g2svg as geojson2svg (shorthand)
-var g2svg = function(options) {
-  this.options = options || {};
-  this.viewportSize = this.options.viewportSize ||
+var g2svg = function(options = {}) {
+  if (!options.mapExtent) {
+    // throw new
+    //   Error('One of the parameter is must: mapExtent or mapExtentFromGeojson');
+    this.mapExtentFromGeojson = true;
+  } else {
+    this.mapExtentFromGeojson = options.mapExtentFromGeojson;
+  }
+  if (options.fitTo && !/^(width|height)$/i.test(options.fitTo)) {
+    throw new Error('"fitTo" option should be "width" or "height" ');
+  }
+  this.options = options;
+  this.viewportSize = options.viewportSize ||
     {width: 256, height: 256};
-  this.mapExtent = this.options.mapExtent ||
-    {
-      left: -20037508.342789244,
-      right: 20037508.342789244,
-      bottom: -20037508.342789244,
-      top: 20037508.342789244
+  if (options.coordinateCoverter
+    && typeof options.coordinateConverter != 'function')
+  {
+    throw new Error('"coordinateConverter" option should be function');
+  }
+  this.coordinateConverter = options.coordinateConverter;
+  if (options.mapExtent && this.coordinateConverter) {
+    var rightTop = this.coordinateConverter(
+      [options.mapExtent.right, options.mapExtent.top]);
+    var leftBottom = this.coordinateConverter(
+      [options.mapExtent.left, options.mapExtent.bottom]);
+    this.mapExtent = {
+      left: leftBottom[0], bottom: leftBottom[1],
+      right: rightTop[0], top: rightTop[1]
     };
-  this.res = this.calResolution(this.mapExtent,this.viewportSize,
-    this.options.fitTo);
+  } else {
+    // yes, it may be undefined in case of mapExtentFromGeojson is true
+    this.mapExtent = options.mapExtent;
+  }
+  if (this.mapExtent) {
+    this.res = this.calResolution(this.mapExtent,this.viewportSize,
+      this.options.fitTo);
+  }
 };
+function convertExtent (extent, converter) {
+  var leftBottom = converter([extent[0], extent[1]]);
+  var rightTop = converter([extent[2], extent[3]]);
+  return [...leftBottom, ...rightTop];
+}
 g2svg.prototype.calResolution = function(extent,size,fitTo) {
   var xres = (extent.right - extent.left)/size.width;
   var yres = (extent.top - extent.bottom)/size.height;
@@ -31,8 +62,26 @@ g2svg.prototype.calResolution = function(extent,size,fitTo) {
     return Math.max(xres,yres);
   }
 };
-g2svg.prototype.convert = function(geojson,options)  {
-  var opt = extend(this.options, options || {});
+g2svg.prototype.convert = function(geojson,options) {
+  var resetExtent = false;
+  if (!this.res && this.mapExtentFromGeojson) {
+    var resetExtent = true;
+    var extent = bbox(geojson); // output extent is an array
+    if (this.coordinateConverter) {
+      // var rightTop = this.coordinateConverter(extent[2] , extent[3]);
+      // var leftBottom = this.coordinateConverter(extent[0], extent[1]);
+      // extent = [leftBottom[0], leftBottom[1],
+      //   rightTop[0], rightTop[1]];
+      extent = convertExtent(extent, this.coordinateConverter);
+    }
+    this.mapExtent = {
+      left: extent[0], bottom: extent[1],
+      right: extent[2], top: extent[3]
+    };
+    this.res = this.calResolution(
+      this.mapExtent, this.viewportSize, this.options.fitTo);
+  }
+  var opt = extend(true, {}, this.options, options || {});
   var multiGeometries = ['MultiPoint','MultiLineString','MultiPolygon'];
   var geometries = ['Point', 'LineString', 'Polygon'];
   var svgElements = [];
@@ -51,14 +100,18 @@ g2svg.prototype.convert = function(geojson,options)  {
   } else if (converter[geojson.type]) {
     svgElements = this.convertGeometry(geojson,opt);
   } else {
-    return;
+    throw new Error('Geojson type not supported.');
+  }
+  if (resetExtent) {
+    this.res = null;
+    this.mapExtent = null;
   }
   if(opt.callback) opt.callback.call(this,svgElements);
   return svgElements;
 };
 g2svg.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
-  var opt = extend(this.options, options || {});
+  var opt = extend(true, {}, this.options, options || {});
   if (opt.attributes && opt.attributes instanceof Array) {
     var arr = opt.attributes
     opt.attributes = arr.reduce(function(sum, property) {
@@ -99,7 +152,7 @@ g2svg.prototype.convertFeature = function(feature,options) {
 };
 g2svg.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
-    var opt = extend(this.options, options || {});
+    var opt = extend(true, {}, this.options, options || {});
     var output = opt.output || 'svg';
     var paths = converter[geom.type].call(this,geom,
       this.res,
@@ -119,7 +172,7 @@ g2svg.prototype.convertGeometry = function(geom,options) {
       return paths;
     }
   } else {
-    return;
+    throw new Error('Geojson type not supported.');
   }
 };
 

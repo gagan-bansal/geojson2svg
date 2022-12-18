@@ -24,14 +24,24 @@ function drawGeoJSON(resp) {
   };
   extendGeoJSON(geojson.features,popData.countries,joinMap);
   // covert wgs84 data to Web Mercator projection
-  var geojson = reproject.reproject(
+  var geojsonWebMerc = reproject.reproject(
     geojson,'EPSG:4326','EPSG:3857',proj4.defs);
-  //render on svg
+  // calculate geojson data extent
+  var extent = bbox(geojsonWebMerc)
+  // get map svg element
   var svgMap = document.getElementById('map');
-  var convertor = geojson2svg({ viewportSize: {width:800,height:800}});
+  // initiate geojson2svg
+  var convertor = geojson2svg({
+    viewportSize: {width:800,height:800},
+    mapExtent: {
+      left: extent[0], right: extent[2],
+      bottom: extent[1], top: extent[3]
+    }
+  });
+  
   // render feature based on population
   var svgElements = [];
-  geojson.features
+  geojsonWebMerc.features
     .filter( function(f) {
       return f.properties.population > 50000000; })
     .forEach( function(f) {
@@ -42,7 +52,7 @@ function drawGeoJSON(resp) {
       svgDocFrag.firstChild.classList.add('more');
       svgMap.appendChild(svgDocFrag);
     });
-  geojson.features
+  geojsonWebMerc.features
     .filter( function(f) {
       return f.properties.population <= 50000000; })
     .forEach( function(f) {
