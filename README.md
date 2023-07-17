@@ -158,7 +158,7 @@ var svgElements = svgStrings.map(function(svgString) {
 
 The options **'attributes'**, **'r'** and **'callback'** can also be given in **convert** function
 ```
-var svgStrings = convertor.convert(geojson,
+var svgStrings = converter.convert(geojson,
   {
     "attributes": ...,
     "r": ...,
