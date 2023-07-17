@@ -1,6 +1,6 @@
 {
   "name": "geojson2svg",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "Converts geojson to svg/path string given svg viewport size and maps extent.",
   "main": "src/main.js",
   "types": "src/main.d.ts",
@@ -10,9 +10,9 @@
     "build-min": "browserify src/main.js --standalone geojson2svg | uglifyjs -c > dist/geojson2svg.min.js",
     "build": "npm run build-debug && npm run build-min",
     "changelog": "auto-changelog --commit-limit=false && git add ./CHANGELOG.md && git commit --amend",
-    "release:patch": "npm version patch && changelog",
-    "release:minor": "npm version minor && changelog",
-    "release:major": "npm version major && changelog",
+    "release:patch": "npm version patch && npm run changelog",
+    "release:minor": "npm version minor && npm run changelog",
+    "release:major": "npm version major && npm run changelog",
     "watch": "mocha -w"
   },
   "keywords": [
