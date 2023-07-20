@@ -39,7 +39,6 @@
     "deepmerge": "^4.2.2",
     "exorcist": "^2.0.0",
     "jsdom": "^18.1.1",
-    "markserv": "^1.17.4",
     "mocha": "^10.1.0",
     "parse-svg-path": "~0.1.2",
     "pre-commit": "^1.2.2",
