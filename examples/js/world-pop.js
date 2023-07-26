@@ -30,8 +30,8 @@ function drawGeoJSON(resp) {
   var extent = bbox(geojsonWebMerc)
   // get map svg element
   var svgMap = document.getElementById('map');
-  // initiate geojson2svg
-  var convertor = geojson2svg({
+  // initiate GeoJSON2SVG
+  var convertor = new GeoJSON2SVG({
     viewportSize: {width:800,height:800},
     mapExtent: {
       left: extent[0], right: extent[2],

@@ -1,10 +1,8 @@
 var bbox = require('geojson-bbox');
-//var extend = require('./extend.js');
 var extend = require('extend');
 var converter = require('./converter.js');
 
-//g2svg as geojson2svg (shorthand)
-var g2svg = function(options = {}) {
+var GeoJSON2SVG = function(options = {}) {
   if (!options.mapExtent) {
     // throw new
     //   Error('One of the parameter is must: mapExtent or mapExtentFromGeojson');
@@ -47,7 +45,7 @@ function convertExtent (extent, converter) {
   var rightTop = converter([extent[2], extent[3]]);
   return [...leftBottom, ...rightTop];
 }
-g2svg.prototype.calResolution = function(extent,size,fitTo) {
+GeoJSON2SVG.prototype.calResolution = function(extent,size,fitTo) {
   var xres = (extent.right - extent.left)/size.width;
   var yres = (extent.top - extent.bottom)/size.height;
   if (fitTo) {
@@ -62,7 +60,7 @@ g2svg.prototype.calResolution = function(extent,size,fitTo) {
     return Math.max(xres,yres);
   }
 };
-g2svg.prototype.convert = function(geojson,options) {
+GeoJSON2SVG.prototype.convert = function(geojson,options) {
   var resetExtent = false;
   if (!this.res && this.mapExtentFromGeojson) {
     var resetExtent = true;
@@ -109,7 +107,7 @@ g2svg.prototype.convert = function(geojson,options) {
   if(opt.callback) opt.callback.call(this,svgElements);
   return svgElements;
 };
-g2svg.prototype.convertFeature = function(feature,options) {
+GeoJSON2SVG.prototype.convertFeature = function(feature,options) {
   if(!feature && !feature.geometry) return;
   var opt = extend(true, {}, this.options, options || {});
   if (opt.attributes && opt.attributes instanceof Array) {
@@ -150,7 +148,7 @@ g2svg.prototype.convertFeature = function(feature,options) {
   if (id) opt.attributes.id = id;
   return this.convertGeometry(feature.geometry,opt);
 };
-g2svg.prototype.convertGeometry = function(geom,options) {
+GeoJSON2SVG.prototype.convertGeometry = function(geom,options) {
   if(converter[geom.type]) {
     var opt = extend(true, {}, this.options, options || {});
     var output = opt.output || 'svg';
@@ -221,4 +219,4 @@ function valueAt(obj,path) {
   }
   return path.split('.').reduce(index, obj);
 }
-module.exports = g2svg;
+module.exports = {GeoJSON2SVG};

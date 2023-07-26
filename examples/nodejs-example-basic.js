@@ -1,9 +1,9 @@
 // uncomment next line if not using in this repo directory
 // var geojson2svg = require('geojson2svg');
 // comment next line if not using in this repo directory
-var geojson2svg = require('../src/main.js');
+var {GeoJSON2SVG} = require('../src/index.js');
 
-var converter = geojson2svg({
+var converter = new GeoJSON2SVG({
   mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
   viewportSize: {width: 200, height: 100},
   attributes: ['properties.class' , 'properties.foo'],

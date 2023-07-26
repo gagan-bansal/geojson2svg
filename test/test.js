@@ -11,18 +11,14 @@ var {JSDOM} = jsdom;
 
 describe('geojson2svg', function() {
   var precision = testData.precision;
-  var g2svg = require('../src/instance.js');
-  var geojson2svg = require('../src/main.js');
-  describe('Test geojson2svg Class and instance', function () {
-    it('g2svg is function',function () {
-      expect(typeof g2svg === 'function').to.be.true;
+  var {GeoJSON2SVG} = require('../src/index.js');
+  describe('Test geojson2svg class and instance', function () {
+    it('GeoJSON2SVG is function',function () {
+      expect(typeof GeoJSON2SVG === 'function').to.be.true;
     });
-    it('geojson2svg is function',function () {
-      expect(typeof geojson2svg === 'function').to.be.true;
-    });
-    var converter = geojson2svg(testData.options);
-    it('converter is an instance of g2svg', function () {
-      assert.instanceOf(converter, g2svg);
+    var converter = new GeoJSON2SVG(testData.options);
+    it('converter is an instance of GeoJSON2SVG', function () {
+      assert.instanceOf(converter, GeoJSON2SVG);
     });
     it("converter has method convert", function () {
       assert.isFunction(converter.convert);
@@ -36,7 +32,7 @@ describe('geojson2svg', function() {
   });
 
   describe("Test all geojson types for 'convert' function", function() {
-    var converter = geojson2svg(testData.options);
+    var converter = new GeoJSON2SVG(testData.options);
     testData.geojsons.forEach(function(data) {
       it(data.type+ ' {output: "path",explode: false,r:2}',function() {
         var options = {output:'path'};
@@ -52,10 +48,10 @@ describe('geojson2svg', function() {
   });
 
   describe("Test all options of 'convert' function", function() {
-    var converter = geojson2svg(testData.options);
+    var converter = new GeoJSON2SVG(testData.options);
     it('Point while output svg as Circle', function() {
       var expSVGs = [ '<circle cx="128.00031940098992" cy="127.99968059901009" r="2"/>' ]
-      var converter = geojson2svg(testData.options);
+      var converter = new GeoJSON2SVG(testData.options);
       var actualSVGs = converter.convert(
         {type:'Point',coordinates:[50,50]},
         {pointAsCircle: true});
@@ -76,7 +72,7 @@ describe('geojson2svg', function() {
     it('Output svg coordinates precision', function() {
       var geojson = {type:'LineString',coordinates:[[10,10],[15,20],[30,10]]};
       var expSVGs = ['<path d="M105.556,44.444 108.333,38.889 116.667,44.444"/>'];
-      var converter = geojson2svg(testData.options);
+      var converter = new GeoJSON2SVG(testData.options);
       var actualSVGs = converter.convert(geojson, {precision: 3});
       expect(actualSVGs).to.be.an('array');
       expect(actualSVGs.length).to.be.equal(1);
@@ -134,7 +130,7 @@ describe('geojson2svg', function() {
       }
     });
     it('Polygon fit to width', function() {
-      var converter2 = geojson2svg(
+      var converter2 = new GeoJSON2SVG(
         {
           viewportSize: {width: 300, height: 100},
           mapExtent: {left: -180, bottom: -90, right: 180, top: 90},
@@ -153,7 +149,7 @@ describe('geojson2svg', function() {
     });
 
     it('Add attributes to svg based on each feature properties:', function() {
-      var converter = geojson2svg({
+      var converter = new GeoJSON2SVG({
         mapExtent: testData.mercatorExtent,
         attributes: ['properties.foo', 'properties.bar', 'properties.baz']
       })
@@ -184,7 +180,7 @@ describe('geojson2svg', function() {
     });
 
     it('Add attributes to svg based on each feature properties and static attributes also:', function() {
-      var converter = geojson2svg({
+      var converter = new GeoJSON2SVG({
         mapExtent: testData.mercatorExtent,
         attributes: [
           {
@@ -229,7 +225,7 @@ describe('geojson2svg', function() {
 
     it('Add given attributes in options to all svg elements: '
       + 'pass attributes in constructor', function() {
-      var converter = geojson2svg({
+      var converter = new GeoJSON2SVG({
         mapExtent: testData.mercatorExtent,
         attributes: {class: 'foo'}
       });
@@ -241,7 +237,7 @@ describe('geojson2svg', function() {
     });
     it('Add given attributes in options to all svg elements: '
       + 'pass attributes in .convert', function() {
-      var converter = geojson2svg({
+      var converter = new GeoJSON2SVG({
         mapExtent: testData.mercatorExtent,
         attributes: {class: 'foo',id: 'foo-1'}
       });
@@ -255,7 +251,7 @@ describe('geojson2svg', function() {
       expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
     });
     it('Add id to svg: as feature.id', function() {
-      var converter = geojson2svg({
+      var converter = new GeoJSON2SVG({
         mapExtent: testData.mercatorExtent,
         attributes: {class: 'foo'}
       });
@@ -270,7 +266,7 @@ describe('geojson2svg', function() {
       expect(outputEle.getAttribute('id')).to.be.equal('foo-1');
     });
     it('Add id to svg: as feature.properties.id', function() {
-      var converter = geojson2svg({
+      var converter = new GeoJSON2SVG({
         mapExtent: testData.mercatorExtent,
         attributes: {class: 'foo'}
       });
@@ -286,7 +282,7 @@ describe('geojson2svg', function() {
     });
 
     it('Extent from geojson', function () {
-      var converter = geojson2svg({
+      var converter = new GeoJSON2SVG({
         mapExtentFromGeojson: true
       });
       var actualData = converter.convert(
@@ -301,7 +297,7 @@ describe('geojson2svg', function() {
     it('coordinateConverter options', function () {
       const proj4 = require('proj4');
       const forward = proj4('WGS84', 'EPSG:3857').forward;
-      var converter = geojson2svg({
+      var converter = new GeoJSON2SVG({
         mapExtentFromGeojson: true,
         viewportSize: {width: 800, height: 60},
         fitTo: 'width',

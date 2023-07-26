@@ -1,4 +1,4 @@
-const geojson2svg = require('../src/main.js');
+const {GeoJSON2SVG} = require('../src/index.js');
 
 const proj4 = require('proj4');
 
@@ -13,7 +13,7 @@ const fitTo = 'width';
 const lineWGS84 = {type:'LineString',coordinates:[pt1, pt2]};
 console.log('lineWGS84: ', lineWGS84)
 
-const converterWGS84 = geojson2svg({
+const converterWGS84 = new GeoJSON2SVG({
   mapExtentFromGeojson: true,
   viewportSize,
   fitTo,
@@ -28,7 +28,7 @@ const pt1WM = forward(pt1);
 const pt2WM = forward(pt2);
 const lineWebMerc = {type:'LineString', coordinates: [pt1WM, pt2WM]};
 console.log('lienWebMerc: ', JSON.stringify(lineWebMerc));
-const converterWM = geojson2svg({
+const converterWM = new GeoJSON2SVG({
   mapExtentFromGeojson: true,
   viewportSize,
   fitTo,

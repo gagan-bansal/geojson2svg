@@ -11,8 +11,8 @@ function drawGeoJSON(resp) {
     geojson,'EPSG:4326','EPSG:3857',proj4.defs);
   var svgMap = document.getElementById('scene');
   panzoom(svgMap)
-  var convertor = geojson2svg(
-    { 
+  var convertor = new GeoJSON2SVG(
+    {
       viewportSize: {width:800,height:800},
       attributes: {
         'style': 'stroke:#006600; fill: #F0F8FF;stroke-width:0.5px;',
