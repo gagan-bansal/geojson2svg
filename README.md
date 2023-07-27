@@ -3,15 +3,15 @@ Converts GeoJSON to an SVG string, given the SVG viewport size and map extent. g
 
 Check [world map](https://rawgit.com/gagan-bansal/geojson2svg/master/examples/world.html), [SVG scaled map](https://rawgit.com/gagan-bansal/geojson2svg/master/examples/world-scaled.html) and [color coded map](https://rawgit.com/gagan-bansal/geojson2svg/master/examples/world-pop.html) examples to demonstrate that its very easy to convert GeoJSON into map.
 
- 🛠 [Installation](#installation)  
- :car: [Usage](#usage)  
- :popcorn: [Basic Example](#basic-example)  
- 🔌 [API](#api)  
- ✈️  [Migration from 1.x to 2.x (Breaking Change)](#migration-from-1x-to-2x)  
- 📌 [Important points](#important-points)  
- 📋 [Changelog](#changelog)  
- 🪪 [License](#license)  
- 🔗 [Related useful articles](#related-useful-articles)  
+ 🛠 [Installation](#-installation)  
+ :car: [Usage](#car-usage)  
+ :popcorn: [Basic Example](#popcorn-basic-example)  
+ 🔌 [API](#-api)  
+ ✈️  [Migration from 1.x to 2.x](#-migration-from-1x-to-2x)  
+ 📌 [Important points](#-important-points)  
+ 📋 [Changelog](#-changelog)  
+ 🪪 [License](#-license)  
+ 🔗 [Related useful articles](#-related-useful-articles)  
 
 ## 🛠 Installation
 * Using in node.js
@@ -100,9 +100,31 @@ console.log(svgStr);
 
 ## ✈️ Migration from 1.x to 2.x
 
-Default value of `mapExtent` in 1.x was Web Mercator projection's full extent. In 2.x if `mapExtent` is not provided the `mapExtentFromGeoJSON` is considered to be true, that means the extent of the input data is considered as `mapExtent`.
+* Default export as a function is removed. Now `geojson2svg` exports class `GeoJSON2SVG`.
 
-There is only one case (from 1.x to 2.x) for which your existing code would fail, the input GeoJSON data projection system is Web Mercator and you have not specified `mapExtent`. So to work with 2.x just pass the `mapExtent` as [Web Mercator extent](https://gis.stackexchange.com/a/280022/12962)
+  With 1.x
+  ```javascript
+  const geojson2svg = require('geojson2svg');
+  const converter = geojson2svg(options);
+  ```
+
+  Now with 2.x
+
+  ```javascript
+    // With ES6
+    import {GeoJSON2SVG} from 'geojson2svg';
+    const converter = new GeoJSON2SVG(options);
+    const svgStrings = converter.convert(geojson, options);
+
+    // With CommonJS
+    const {GeoJSON2SVG} = require('geojson2svg');
+    const converter = new GeoJSON2SVG(options);
+  ```
+
+
+* Default value of `mapExtent` in 1.x was Web Mercator projection's full extent. In 2.x if `mapExtent` is not provided the `mapExtentFromGeoJSON` is considered to be true, that means the extent of the input data is considered as `mapExtent`.
+
+* There is only one case (from 1.x to 2.x) for which your existing code would fail, the input GeoJSON data projection system is Web Mercator and you have not specified `mapExtent`. So to work with 2.x just pass the `mapExtent` as [Web Mercator extent](https://gis.stackexchange.com/a/280022/12962)
 
 ## 🔌 API
 
