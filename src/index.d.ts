@@ -85,7 +85,7 @@ declare module 'geojson2svg' {
     callback?: (svgString: string) => void
   }
 
-  export default class GeoJSON2SVG {
+  export class GeoJSON2SVG {
     public constructor(options?: Options)
     public convert(geojson: GeoJSON, options?: Options): string[]
   }
