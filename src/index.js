@@ -16,7 +16,7 @@ var GeoJSON2SVG = function(options = {}) {
   this.options = options;
   this.viewportSize = options.viewportSize ||
     {width: 256, height: 256};
-  if (options.coordinateCoverter
+  if (options.coordinateConverter
     && typeof options.coordinateConverter != 'function')
   {
     throw new Error('"coordinateConverter" option should be function');

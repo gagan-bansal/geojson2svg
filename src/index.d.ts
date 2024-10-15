@@ -66,6 +66,9 @@ declare module 'geojson2svg' {
     /** Fit ouput svg map to width or height. */
     fitTo?: 'width' | 'height'
 
+    /** Convert input GeoJSON coordinates while converting to SVG. This function should take coordinates of a point [x,y] and returns transformed point [x, y] */
+    coordinateConverter?: (point: [number, number]) => [number, number],
+
     /** a number, precision of output svg coordinates. */
     precision?: number
 
