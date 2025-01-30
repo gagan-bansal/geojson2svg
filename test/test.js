@@ -194,6 +194,12 @@ describe('geojson2svg', function() {
             property: 'bar',
             value: 'barStatic',
             type: 'static'
+          }, {
+            property: 'properties.baz',
+            type: 'dynamic'
+          }, {
+            property: 'properties.qux',
+            type: 'dynamic'
           }]
       });
       var svgStr = converter.convert({
@@ -201,11 +207,11 @@ describe('geojson2svg', function() {
         features: [{
           type: 'Feature',
           geometry: {type: 'LineString', coordinates: [[0,0], [1000,1000]]},
-          properties: {foo: 'fooVal-1', bar: 'barVal-1', baz: 'bazVal-1'}
+          properties: {foo: 'fooVal-1', bar: 'barVal-1', baz: 'bazVal-1', qux: 0}
         }, {
           type: 'Feature',
           geometry: {type: 'LineString', coordinates: [[10,10], [100,100]]},
-          properties: {foo: 'fooVal-2', bar: 'barVal-2'}
+          properties: {foo: 'fooVal-2', bar: 'barVal-2', baz: false, qux: null}
         }]
       })
       var svgEle1 = string2dom(svgStr[0]);
@@ -213,13 +219,15 @@ describe('geojson2svg', function() {
       expect(svgEle1.getAttribute('id')).to.be.equal('fooVal-1');
       expect(svgEle1.getAttribute('bar')).to.be.equal('barStatic');
       expect(svgEle1.getAttribute('baz')).to.be.equal('bazVal-1');
+      expect(svgEle1.getAttribute('qux')).to.be.equal('0');
       expect(svgEle1.getAttribute('foo')).to.be.null;
 
       var svgEle2 = string2dom(svgStr[1]);
       expect(svgEle2).to.respondTo('getAttribute');
       expect(svgEle2.getAttribute('id')).to.be.equal('fooVal-2');
       expect(svgEle2.getAttribute('bar')).to.be.equal('barStatic');
-      expect(svgEle2.getAttribute('baz')).to.be.null;
+      expect(svgEle2.getAttribute('baz')).to.be.equal('false');
+      expect(svgEle2.getAttribute('qux')).to.be.equal('null');
       expect(svgEle2.getAttribute('foo')).to.be.null;
     });
 
