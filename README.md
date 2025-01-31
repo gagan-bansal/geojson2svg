@@ -220,7 +220,12 @@ let svgStrings = convertor.convert(geojson,
 
 ## 📌 Important points
 
-* **mapExtent** is critical option. Usually your data would would be in [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System) (World Geodetic System) and unit as degree decimal for latitudes and longitude. Spatial reference system code for this is "EPSG:4326". To show the geographic data on two dimensional plane (paper or HTML page) the coordinates need to be projected. The usual choice is Web Mercator projection ('EPSG:3857') also known as Spherical Mercator. Web Mercator projection is used by many web mapping sites (OpenStreetMap, Google, Bing, and others). Geographic coordinates can be converted to Web Mercator Projection using [reproject-spherical-mercator](https://github.com/geosquare/reproject-spherical-mercator) or [reproject](https://github.com/perliedman/reproject) or [proj4js](https://github.com/proj4js/proj4js). Check [world map](https://github.com/gagan-bansal/geojson2svg/blob/master/examples/js/world.js) example for detail.
+* **Coordinate projection:** this library does not automatically project GeoJSON coordinates. If your input GeoJSON and `mapExtent` coordinates are in [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System) (World Geodetic System) you should provide a `coordinateConverter` function to project the coordinate values to a system such as Web Mercator projection ('EPSG:3857') also known as Spherical Mercator. Web Mercator projection is used by many web mapping sites (OpenStreetMap, Google, Bing, and others). Geographic coordinates can be converted to Web Mercator Projection using packages like:
+    * [reproject-spherical-mercator](https://github.com/geosquare/reproject-spherical-mercator)
+    * [reproject](https://github.com/perliedman/reproject)
+    * [proj4js](https://github.com/proj4js/proj4js)
+
+    Check [world map](https://github.com/gagan-bansal/geojson2svg/blob/master/examples/js/world.js) example for detail.
 
 * **Assigning id to SVG path,** there are two ways to achieve this. The first is default, the converter reads it from GeoJSON data attributes `feature.properties.id` or `feature.id`. Another way is explicitly specify the `id` attributes in `.convert` method, pass id along with attributes like `converter.convert(feature, {attributes: {id:'foo-1', class: 'bar'}})`. Preference order is: first as `id` key in attributes then `feature.id` and last `feature.properties.id`.
 
