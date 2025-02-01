@@ -440,9 +440,9 @@ GeoJSON2SVG.prototype.convertFeature = function(feature,options) {
         try {
           val = valueAt(feature, property)
         } catch(e) {
-          val = false
+          val = undefined
         }
-        if (val) sum[key] = val
+        if (val !== undefined) sum[key] = val
       } else if (typeof(property) === 'object' && property.type
         && property.property)
       {
@@ -452,9 +452,9 @@ GeoJSON2SVG.prototype.convertFeature = function(feature,options) {
           try {
             val = valueAt(feature, property.property)
           } catch(e) {
-            val = false
+            val = undefined
           }
-          if (val) sum[key] = val
+          if (val !== undefined) sum[key] = val
         } else if (property.type === 'static'  && property.value) {
           sum[property.property] = property.value
         }
